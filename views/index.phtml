@@ -1,0 +1,226 @@
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+
+<div class="row">
+  <div class="col-lg-12 mb-4 order-0">
+    <div class="card">
+      <div class="d-flex align-items-end row">
+        <div class="col-sm-7">
+          <div class="card-body">
+            <h4 class="card-title text-primary">Welcome <?php echo isset($loggedInUser['fullName']) ? $loggedInUser['fullName'] : '' ?></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'): ?>
+  <div class="col-lg-12 col-md-12 order-1">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/sales.png" alt="chart success" class="rounded">
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Total Sales</span>
+            <h3 class="card-title mb-2" id="totalS"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/acquisition.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span>Today's Sales</span>
+            <h3 class="card-title text-nowrap mb-1" id="totalST"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Total Revenue -->
+
+  <!--/ Total Revenue -->
+  <div class="col-12 col-md-12 col-lg-12 order-3 order-md-2">
+    <div class="row">
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/deposit.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Bank Deposit</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalBD"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/withdraw.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Bank Withdrawals</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalBW"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/wallet.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Bank Balance</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalBB"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/budget.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Total Expenses</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalE"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/driver.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Total Drivers</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalD"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/vehicle.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="d-block mb-1">Total Vehicles</span>
+            <h3 class="card-title text-nowrap mb-2" id="totalV"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/workers.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Total Workers</span>
+            <h3 class="card-title mb-2" id="totalW"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="/views/assets/img/icons/unicons/user.png" alt="Credit Card" class="rounded">
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Total Admins</span>
+            <h3 class="card-title mb-2" id="totalAd"><i class='bx bx-loader-alt bx-spin'></i></h3>
+          </div>
+        </div>
+      </div>
+      <!-- </div>
+    <div class="row"> -->
+    </div>
+  </div>
+  <?php endif ?>
+</div>
+
+            
+          </div>
+          <!-- / Content -->
+
+          
+          
+
+<!-- Footer -->
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <?php if($_SESSION['userRole'] !== 'attendant'): ?>
+  <script src="/views/api/dashboard.API.js"></script>
+  <?php endif ?>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  <script src="/views/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="/views/assets/js/dashboards-analytics.js"></script>
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:08:55 GMT -->
+</html>

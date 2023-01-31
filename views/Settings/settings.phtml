@@ -1,0 +1,133 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+<style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+<!-- / Navbar -->
+
+      
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Settings/</span> Website Settings</h4>
+
+<!-- Basic Layout & Basic with Icons -->
+<div class="row mb-5">
+  <!-- Basic Layout -->
+  <div class="col-xxl">
+    <div class="card mb-4">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">Settings</h5>
+      </div>
+      <div class="card-body">
+        <form autocomplete="off" id="settingsForm">
+          <span id="settingsErr"></span>
+            <div class="card-body">
+                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                  <img src="/uploads/logos/<?php echo Settings::$getLogo ? Settings::$getLogo : ''?>"" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                  <div class="button-wrapper">
+                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                      <span class="d-none d-sm-block">Upload new logo</span>
+                      <i class="bx bx-upload d-block d-sm-none"></i>
+                      <input type="file" id="upload" name="siteLogo" class="account-file-input" hidden="" accept="image/png, image/jpeg">
+                    </label>
+                    <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                      <i class="bx bx-reset d-block d-sm-none"></i>
+                      <span class="d-none d-sm-block">Reset</span>
+                    </button>
+        
+                    <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                  </div>
+                </div>
+              </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Website Name</label>
+            <div class="col-sm-10">
+              <input type="text" name="siteName" class="form-control" value="<?php echo Settings::$getSiteName ? Settings::$getSiteName : ''?>" id="basic-default-name" placeholder="" required/>
+            </div>
+          </div>
+          
+          <div class="row justify-content-end">
+            <div class="col-sm-10">
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+            <div class="mb-5"></div>
+            <div class="mb-5"></div>
+            <div class="mb-5"></div>
+            <div class="mb-5"></div>
+            <div class="mb-5"></div>
+            <div class="mb-4"></div>
+          </div>
+          <!-- / Content -->
+
+            
+        <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+          
+
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+  
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+<script src="/views/api/settings.API.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  <!-- Page JS -->
+  
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/form-layouts-horizontal.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:29 GMT -->
+</html>

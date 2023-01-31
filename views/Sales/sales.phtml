@@ -1,0 +1,112 @@
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+                  
+          <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Sales/</span> Sales
+          </h4>
+
+          <!-- Basic Bootstrap Table -->
+          <div class="card">
+            <div class="flexDiv">
+              <h5 class="card-header">All Sales</h5>
+              <!-- Button trigger modal -->
+              <div>
+                <select id="smallSelect" class="form-select form-select-sm">
+                  <option value="all" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'all'? 'selected' : 'selected'; ?> >All Sales</option>
+                  <option value="today" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'selected' : ''; ?>>Today's Sales</option>
+                </select>
+              </div>
+            </div>
+            <span class="ms-3" id="deleteErr"></span>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Driver</th>
+                    <th>Amount</th>
+                    <th>Recorded By</th>
+                    <?php if($_SESSION['userRole'] === 'superAdmin' ||  $_SESSION['userRole'] === 'admin'): ?>
+                      <th>Actions</th>
+                    <?php endif ?>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0"></tbody>
+              </table>
+              
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="demo-inline-spacing">
+                    <!-- Basic Pagination -->
+                    <nav aria-label="Page navigation">
+                      <ul class="pagination">
+                       
+                      </ul>
+                    </nav>
+                    <!--/ Basic Pagination -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--/ Basic Bootstrap Table -->
+
+          <hr class="my-5">
+                    
+      </div>
+<script src="/views/api/sales.API.js"></script>
+<!-- / Content -->
+
+
+<!-- Footer -->
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+  
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:32 GMT -->
+</html>

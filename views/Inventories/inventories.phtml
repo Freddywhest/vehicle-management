@@ -1,0 +1,137 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+                  
+          <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Inventories
+          </h4>
+
+          <!-- Basic Bootstrap Table -->
+          <div class="card">
+            <div class="flexDiv">
+              <h5 class="card-header">Inventories</h5>
+              <!-- Button trigger modal -->
+              <form id="searchInventoryForm" autocomplete="off">
+                <div class="d-flex g-3">
+                    <input name="searchInventory" class="form-control form-control-sm me-2" type="search" placeholder="Search for inventory">
+                    <button type="submit" disabled="true" id="searchInventoryBtn" class="btn btn-primary btn-sm">Search</button>
+                </div>
+              </form>
+              <div>
+                <select id="smallSelect" class="form-select form-select-sm">
+                  <option value="default" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'default'? 'selected' : 'selected'; ?> >Default</option>
+                  <option value="old" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'old' ? 'selected' : ''; ?>>Oldest</option>
+                </select>
+              </div>
+            </div>
+            <span class="ms-3" id="deleteErr"></span>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Inventory Name</th>
+                    <th>Condition</th>
+                    <th>Quantity</th>
+                    <th>Vehicle Brand</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0"></tbody>
+              </table>
+              
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="demo-inline-spacing">
+                    <!-- Basic Pagination -->
+                    <nav aria-label="Page navigation">
+                      <ul class="pagination">
+                       
+                      </ul>
+                    </nav>
+                    <!--/ Basic Pagination -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--/ Basic Bootstrap Table -->
+
+          <hr class="my-5">
+          <div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalScrollableTitle">Inventory Details</h5>
+              </div>
+              <div class="modal-body" id="detailsBody">
+                <!-- <div class="text-center fs-3">
+                  <i class='bx bx-loader-alt bx-spin fs-1'></i>
+                </div> -->
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" id="closeDetails" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- / Content -->
+      
+      <!-- Footer -->
+      <script src="/views/api/inventory.API.js"></script>
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+  
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:32 GMT -->
+</html>

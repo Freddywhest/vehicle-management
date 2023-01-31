@@ -1,0 +1,406 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+<style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+                  
+          <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Users /</span> Worker
+          </h4>
+
+          <!-- Basic Bootstrap Table -->
+          <div class="card">
+            <div class="flexDiv">
+              <h5 class="card-header">All Workers</h5>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalScrollable">
+                Add Worker
+              </button>
+            </div>
+            
+            <div class="p-3" id="successDiv"></div>
+            <span class="ms-3" id="deleteErr"></span>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Photo</th>
+                    <th>Status</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0"></tbody>
+              </table>
+              
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="demo-inline-spacing">
+                    <!-- Basic Pagination -->
+                    <nav aria-label="Page navigation">
+                      <ul class="pagination">
+                       
+                      </ul>
+                    </nav>
+                    <!--/ Basic Pagination -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--/ Basic Bootstrap Table -->
+          <div class="modal fade" id="modalScrollable2" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalScrollableTitle">Worker Details</h5><br />
+                </div>
+                  <span class="ms-4 me-4" id="genPass"></span>
+                <div class="modal-body" id="detailsBody">
+                  <div class="text-center fs-3">
+                    <i class='bx bx-loader-alt bx-spin fs-1'></i>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" id="closeDetails" data-bs-dismiss="modal">Close</button>
+                  <span id="genPassBtnDiv"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="my-5">
+                    
+      </div>
+<!-- / Content -->
+ <!-- Default Modal -->
+ <div class="col-lg-8 col-md-8">
+  <div class="modal fade " id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalScrollableTitle">New Worker</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+          <p style="margin-left: 30px" class="p-2" id="pError"></p>
+        <div class="modal-body">
+          <form autocomplete="off" id="addWorkerFrom" enctype="multipart/form-data">
+            <div class="card-body">
+              <div class="d-flex align-items-start align-items-sm-center gap-4">
+                <img src="/views/assets/img/avatars/man.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+                <div class="button-wrapper">
+                  <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                    <span class="d-none d-sm-block">Upload worker photo</span>
+                    <i class="bx bx-upload d-block d-sm-none"></i>
+                    <input type="file" id="upload" name="workerPhoto" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                  </label>
+                  <button type="button" class="btn btn-outline-secondary account-image-reset mb-4" id="resetPhoto">
+                    <i class="bx bx-reset d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Reset</span>
+                  </button>
+      
+                  <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                  <small></small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col mb-3" id="inputParent">
+                <label for="nameBasic" class="form-label">Name</label>
+                <input type="text" id="nameBasic" name="workerName" class="form-control" placeholder="Enter Name" required>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3" id="inputParent">
+                <label for="dob" class="form-label">Date Of Birth</label>
+                <input type="date" id="dob" name="dob" class="form-control" placeholder="Worker's Date of Birth" required>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3" id="selectParent">
+                <label for="defaultSelectRole" class="form-label">Worker Role</label>
+                <select id="defaultSelectRole" name="workerRole" class="form-select" required>
+                  <option value="">select</option>
+                  <option value="attendant">Attendant</option>
+                  <?php if($_SESSION['userRole'] === 'superAmin'): ?>
+                  <option value="admin">Admin</option>
+                  <?php endif ?>
+                </select>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col mb-0" id="inputParent">
+                <label for="phone-h" class="form-label">Phone (one)</label>
+                <input type="number" name="workerPhone1" id="phone-h" class="form-control" placeholder="xxxxxxxxxx" required>
+                 <small></small>
+              </div>
+              <div class="col mb-0" id="inputParent">
+                <label for="phone-m" class="form-label">Phone (two)</label>
+                <input type="number" name="workerPhone2" id="phone-m" class="form-control" placeholder="xxxxxxxxxx" required>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col mb-0" id="inputParent">
+                <label for="id-number" class="form-label">I.D Card Number</label>
+                <input type="text" name="workerId" id="id-number" class="form-control" placeholder="xxxxxxxxxx" required>
+                 <small></small>
+              </div>
+              <div class="col mb-0" id="inputParent">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="workerEmail" id="email" class="form-control" placeholder="xxx@xxxx.xxx" required>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="address" class="form-label">ADDRESS (number, street, building)</label>
+                <input type="text" name="workerAddress" id="address" class="form-control" required>
+                 <small></small>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="city" class="form-label">City/Town</label>
+                <input type="text" id="city" name="workerCity" class="form-control" required>
+                 <small></small>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="region" class="form-label">Region</label>
+                <input type="text" id="region" name="workerRegion" class="form-control" required>
+                 <small></small>
+              </div>
+            </div>
+
+            <div class="col-md mb-3">
+              <small class=" fw-semibold">Have you ever been convicted of a crime other than a minor traffic incident? </small>
+              <div class="form-check mt-3">
+                <input name="crime-radio" class="form-check-input" type="radio" value="yes" id="defaultRadio1">
+                <label class="form-check-label" for="defaultRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="crime-radio" class="form-check-input" type="radio" value="no" id="defaultRadio2" checked="">
+                <label class="form-check-label" for="defaultRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div id="crimeDiv"></div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-sm-3 mb-0" id="selectParent">
+                <label for="defaultSelect" class="form-label">EMPLOYMENT TYPE</label>
+                <select id="defaultSelect" name="workerEmpType" class="form-select" required>
+                  <option value="">select</option>
+                  <option value="full">Full Time</option>
+                  <option value="part">Part Time</option>
+                </select>
+                <small></small>
+              </div>
+              <div class="col-sm-3 mb-0" id="inputParent">
+                <label for="applying" class="form-label">POSITION APPLYING FOR</label>
+                <input type="text" id="applying" name="workerEmpPosition" class="form-control" required> 
+                  <small></small>
+              </div>
+              <div class="col-sm-3 mb-0" id="inputParent">
+                <label for="salary" class="form-label">DESIRED SALARY</label>
+                <input type="text" id="salary" name="workerEmpSalary" class="form-control" required>
+                 <small></small>
+              </div>
+              <div class="col-sm-3 mb-0" id="inputParent">
+                <label for="startDate" class="form-label">DATE YOU CAN START</label>
+                <input type="date" name="workerStartDate" id="startDate" class="form-control" required>
+                <small></small>
+              </div>
+            </div>
+
+            <div class="col-md mb-1">
+              <p class=" fw-semibold">EDUCATION (starting from the latest):</p>
+            </div>
+
+            <div>
+              <div id="schoolFieldDiv">
+                <div class="row g-2 mb-2">
+                  <div class="col-sm-5 mb-0" id="inputParent">
+                    <label id="schoolNameLabel" for="workerSchName" class="form-label">School Name</label>
+                    <input type="text" id="workerSchName" class="form-control" placeholder="Enter Name" required>
+                    <small id="schoolNameErr"></small>
+                  </div>
+                  <div class="col-sm-4 mb-0" id="inputParent">
+                    <label id="schoolLocLabel" for="location" class="form-label">Location</label>
+                    <input type="text" id="workerSchLoc" class="form-control" placeholder="" required>
+                    <small id="schoolLocErr"></small>
+                  </div>
+                  <div class="col-sm-3 mb-2" id="inputParent">
+                    <label id="schoolGradLabel" for="grad" class="form-label">Date Graduated</label>
+                    <input type="date" id="workerSchGrad" class="form-control" placeholder="" required>
+                    <small id="schoolGradErr"></small>
+                  </div>
+                </div>
+              </div>
+                <hr>
+              <button type="button" id="addSchool" class="btn btn-secondary mb-3">+ Add Another School Field</button>
+            </div>
+
+            <div class="col-md mb-1">
+              <p class=" fw-semibold">WORK EXPERIENCE:</p>
+            </div>
+            <div class="col-md mb-3">
+              <small class=" fw-semibold">Does the worker has a working experience? </small>
+              <div class="form-check mt-3">
+                <input name="workingExp-radio" class="form-check-input" type="radio" value="yes" id="defaultRadio3">
+                <label class="form-check-label" for="defaultRadio3">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="workingExp-radio" class="form-check-input" type="radio" value="no" id="defaultRadio4" checked="">
+                <label class="form-check-label" for="defaultRadio4">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div id="experienceFieldDiv"></div>
+            <hr>
+            <div id="expBtnDiv"></div>
+
+            <div class="row g-2 mb-3">
+              <div class="col mb-0">
+                <div class="col-sm-12 mb-1" id="textareaParent">
+                  <label for="grad" class="form-label">MAJOR SKILLS</label>
+                  <textarea type="text" id="reason" name="workerMajorSkills" class="form-control" required></textarea>
+                  <small></small>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="canWorkerBtn" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" id="addWorkerBtn" class="btn btn-primary">Add Worker</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  const companyInputsFirst = `
+  <div class="row g-2 mb-2">
+      <div class="col-sm-6 mb-0" id="inputParent">
+        <label for="" class="form-label">Company Name</label>
+        <input type="text" id="workerExpCompany" name="workerExpCompany" class="form-control" placeholder="" required>
+        <small></small>
+      </div>
+      <div class="col-sm-3 mb-0" id="inputParent">
+        <label for="" class="form-label">Period (From)</label>
+        <input type="number" id="workerExpFrom" name="workerExpFrom" class="form-control" placeholder="" required>
+        <small></small>
+      </div>
+      <div class="col-sm-3 mb-2" id="inputParent">
+        <label for="" class="form-label">Period (To)</label>
+        <input type="number" id="workerExpTo" name="workerExpTo" class="form-control" placeholder="" required>
+        <small></small>
+      </div>
+      <div class="col-sm-12 mb-2" id="inputParent">
+        <label for="" class="form-label">Position</label>
+        <input type="text" id="workerExpPosition" name="workerExpPosition" class="form-control" placeholder="" required>
+        <small></small>
+      </div>
+      <div class="col-sm-12 mb-1" id="textareaParent">
+        <label for="" class="form-label">Reason for Leaving</label>
+        <textarea name="reasonForLeaving" id="reasonForLeaving" class="form-control" required></textarea>
+        <small></small>
+      </div>
+  </div>
+    `;
+
+    const crimeTextArea = `
+        <div class="row g-2 mt-2 mb-4">
+            <div class="col-sm-12 mb-1" id="textareaParent">
+              <label for="" class="form-label">If Yes, please explain</label>
+              <textarea type="number" id="explainCrime" name="explainCrime" class="form-control" required></textarea>
+              <small></small>
+            </div>
+        </div>
+        `;
+</script>
+
+<script src="/views/newWorker.js"></script>
+<script src="/views/api/workers.API.js"></script>
+
+<!-- Footer -->
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+  
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:32 GMT -->
+</html>

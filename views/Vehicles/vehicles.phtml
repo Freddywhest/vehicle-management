@@ -1,0 +1,269 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+<style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+<!-- / Navbar -->
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+                  
+          <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Users /</span> Vehicles
+          </h4>
+
+          <!-- Basic Bootstrap Table -->
+          <div class="card">
+            <div class="flexDiv">
+              <h5 class="card-header">All Vehicles</h5>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalScrollable">
+                Add Vehicles
+              </button>
+            </div>
+            <span class="ms-3" id="deleteErr"></span>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Registration Number</th>
+                    <th>Model</th>
+                    <th>Engine Number</th>
+                    <th>Driven By</th>
+                    <th>Vehicle Type</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="table-border-bottom-0"></tbody>
+              </table>
+              
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <div class="demo-inline-spacing">
+                    <!-- Basic Pagination -->
+                    <nav aria-label="Page navigation">
+                      <ul class="pagination"></ul>
+                    </nav>
+                    <!--/ Basic Pagination -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--/ Basic Bootstrap Table -->
+          <div class="modal fade" id="modalScrollable2" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalScrollableTitle">Vehicles Details</h5>
+                </div>
+                <div class="modal-body" id="detailsBody">
+                  <div class="text-center fs-3">
+                    <i class='bx bx-loader-alt bx-spin fs-1'></i>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" id="closeDetails" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="my-5">
+                    
+      </div>
+<!-- / Content -->
+ <!-- Default Modal -->
+ <div class="col-lg-8 col-md-8">
+  <form id="vehicleForm">
+  <div class="modal fade " id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalScrollableTitle">New Vehicles</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="vehicleForm" autocomplete="off">
+          <span class="ms-4 p-1" id="errDiv"></span>
+        <div class="modal-body">
+          <div class="card-body">
+              <div class="d-flex align-items-start align-items-sm-center gap-4">
+                <img src="/uploads/vehicles/vehicle.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+                <div class="button-wrapper">
+                  <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                    <span class="d-none d-sm-block">Upload vehicle photo</span>
+                    <i class="bx bx-upload d-block d-sm-none"></i>
+                    <input type="file" name="photo" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                  </label>
+                  <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                    <i class="bx bx-reset d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Reset</span>
+                  </button>
+      
+                  <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                </div>
+              </div>
+            </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label for="model" class="form-label">VEHICLE MODEL</label>
+              <input name="model" type="text" id="model" class="form-control" placeholder="" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label for="color" class="form-label">VEHICLE COLOR</label>
+              <input name="color" type="text" id="color" class="form-control" placeholder="" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3">
+              <label for="regisNo" class="form-label">REGISTRATION NUMBER</label>
+              <input name="regisNo" type="text" id="regisNo" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col mb-3">
+              <label for="type" class="form-label">TYPE</label>
+              <input type="text" name="type" id="type" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="engine" class="form-label">ENGINE NUMBER</label>
+              <input type="text" name="engine" id="engine" class="form-control" placeholder="" required>
+            </div>
+            <div class="col mb-0">
+              <label for="trans" class="form-label">TRANS</label>
+              <input type="text" name="trans" id="trans" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="axle" class="form-label">AXLE</label>
+              <input type="text" name="axle" id="axle" class="form-control" placeholder="" required>
+            </div>
+            <div class="col mb-0">
+              <label for="paint" class="form-label">PAINT</label>
+              <input type="text" name="paint" id="paint" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="trim" class="form-label">TRIM</label>
+              <input type="text" name="trim" id="trim" class="form-control" placeholder="" required>
+            </div>
+            <div class="col mb-0">
+              <label for="chasis" class="form-label">CHASIS NUMBER</label>
+              <input type="text" name="chasis" id="chasis" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <div class="form-check mt-3">
+              <input name="convertedRadio" class="form-check-input" type="radio" value="converted" id="convertedRadio1">
+              <label class="form-check-label" for="convertedRadio1">
+                Converted
+              </label>
+            </div>
+            <div class="form-check">
+              <input name="convertedRadio" class="form-check-input" type="radio" value="unconverted" id="convertedRadio2" checked="">
+              <label class="form-check-label" for="convertedRadio2">
+                Unconverted
+              </label>
+            </div>
+          </div>
+
+          <div id="convertedDiv"></div>
+
+          <div class="row g-2 mb-3">
+            <div class="mb-0">
+              <label for="drivenBy" class="form-label"> TO BE DRIVEN BY <br><span class="text-danger">(Note: Please type in [No driver] if you are not yet assigning driver to this vehicle.)</span></label>
+              <input type="text" name="drivenBy" id="drivenBy" class="form-control" placeholder="" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="mb-0">
+              <label for="other" class="form-label"> OTHER VEHICLE INFORMATION <br><span class="text-danger">(Note: Please type in [-] if these is no other information.)</span></label></label>
+              <textarea name="other" id="other" class="form-control" required></textarea>
+            </div>
+          </div>
+
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add Vehicle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+
+
+
+
+<!-- Footer -->
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  <script src="/views/api/vehicle.API.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+</body>
+
+
+</html>

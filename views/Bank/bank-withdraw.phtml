@@ -1,0 +1,119 @@
+
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+<style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+      
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bank/</span>Withdraw from bank</h4>
+
+<!-- Basic Layout -->
+<div class="row">
+  <div class="col-xl">
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Bank withdrawal</h5>
+      </div>
+      <div class="card-body">
+        <span id="withdrawErr"></span>
+        <form autocomplete="off" id="withdrawForm">
+          <div class="mb-3">
+            <label class="form-label" for="basic-default-fullname">Amount to Withdraw</label>
+            <input type="number" name="amount" class="form-control" id="basic-default-fullname" oninvalid="this.setCustomValidity(`Enter withdraw amount!`)" oninput="this.setCustomValidity('')" placeholder="" required/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="">Purpose</label>
+            <textarea name="purpose" class="form-control" oninvalid="this.setCustomValidity(`Enter purpose!`)" oninput="this.setCustomValidity('')" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Withdraw</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl">
+    <div class="card mb-4">
+      <div class="card-header">
+          <h6 class="mb-2">Bank Balance:</h6>
+            <h4 class="mt-2" id="bank-bal"></h4>
+      </div>
+      <div class="card-header">
+          <h6 class="mb-2">Total amount withdrew:</h6>
+            <h4 class="mt-2" id="bank-with"></h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+            
+          </div>
+          <!-- / Content -->
+
+          
+          
+
+<!-- Footer -->
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+  
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/api/bank.API.js"></script>
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/form-layouts-vertical.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:29 GMT -->
+</html>

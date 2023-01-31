@@ -1,0 +1,116 @@
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+<style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Sales/</span> Add Sale</h4>
+
+<!-- Basic Layout -->
+<div class="row">
+  <div class="col-xl">
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Validate Driver</h5>
+      </div>
+      <div class="card-body">
+        <span id="validateErr"></span>
+        <form id="validateDriverFrom" autocomplete="off">
+          <div class="mb-3">
+            <label class="form-label" for="basic-default-fullname">Driver's Identity Number</label>
+            <input type="text" name="driverIdNo" oninvalid="this.setCustomValidity(`Driver's Identity Number shouldn't be empty!`)" oninput="this.setCustomValidity('')" class="form-control" id="basic-default-fullname" placeholder="" required/>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Validate Driver</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl" style="opacity:0; visibility:hidden" id="isValidDriver">
+    <div class="card mb-4">
+      <div class="card-header justify-content-between align-items-center">
+          <h6 class="mb-2">Driver's Identity Number: <strong id="idNo"></strong></h6>
+            <h6 class="mb-2">Driver's Name: <strong id="dName"></strong></h6>
+            <h6 class="mb-0 mt-3 d-flex gap-3">Driver's Photo: <img src="" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" /></h6>
+      </div>
+      <div class="card-body">
+        <span id="validErr"></span>
+        <form id="isValidDriverForm" autocomplete="off">
+          <div class="mb-3">
+            <label class="form-label" for="basic-default-fullname">Sale Amount</label>
+            <input type="hidden" class="form-control" id="dUuid"/>
+            <input type="number" name="amount" class="form-control"  oninvalid="this.setCustomValidity(`Sales amount shouldn't be empty!`)" oninput="this.setCustomValidity('')" id="basic-default-fullname" placeholder="" required/>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">Add Sale</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+            
+          </div>
+          <!-- / Content -->
+
+          
+          
+<script src="/views/api/sales.API.js"></script>
+
+<!-- Footer -->
+  <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/form-layouts-vertical.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:29 GMT -->
+</html>

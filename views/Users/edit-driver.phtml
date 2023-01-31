@@ -1,0 +1,997 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+      
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+<h4 class="fw-bold py-3 mb-4">
+  <span class="text-muted fw-light">Drivers /</span> Driver's Details
+</h4>
+
+<div class="row">
+  <div class="col-md-12">
+    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+      <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Driver's Profile</a></li>
+      <li class="nav-item"><a class="nav-link" href="/driver-sale/<?php echo $params[0] ?>"><i class="bx bx-dollar me-1"></i> Driver's Sales</a></li>
+    </ul>
+    <div class="card mb-4">
+      <h5 class="card-header">Profile Details</h5>
+          <p style="margin-left: 30px" class="p-2" id="pError"></p>
+      <!-- Account -->
+      <form autocomplete="off" id="updateDriver" class="p-3">
+          <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center gap-4">
+              <img src="/uploads/drivers/<?php echo $driver['data']['driverPhoto'] ?>" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+              <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                  <span class="d-none d-sm-block">Upload driver photo</span>
+                  <i class="bx bx-upload d-block d-sm-none"></i>
+                  <input type="file" name="driverPhoto" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                </label>
+                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4"  id="resetPhoto">
+                  <i class="bx bx-reset d-block d-sm-none"></i>
+                  <span class="d-none d-sm-block">Reset</span>
+                </button>
+    
+                <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col mb-3" id="inputParent">
+              <label for="nameBasic" class="form-label">Name</label>
+              <input type="text" id="nameBasic" value="<?php echo $driver['data']['driverFullName'] ?>"  name="driverName" class="form-control" placeholder="Enter Name" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col mb-3" id="inputParent">
+              <label for="dob" class="form-label">Date Of Birth</label>
+              <input type="date" name="dob" value="<?php echo $driver['data']['bateOfBirth'] ?>" id="dob" class="form-control" placeholder="Driver's Date of Birth" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0" id="inputParent">
+              <label for="phone-h" class="form-label">Phone (Home)</label>
+              <input type="number" value="<?php echo $driver['data']['phoneHome'] ?>" name="phoneOne" id="phone-h" class="form-control" placeholder="xxxxxxxxxx" required>
+            </div>
+            <div class="col mb-0" id="inputParent">
+              <label for="phone-m" class="form-label">Phone (Mobile)</label>
+              <input type="number" value="<?php echo $driver['data']['phoneMobile'] ?>" name="phoneTwo" id="phone-m" class="form-control" placeholder="xxxxxxxxxx" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0" id="inputParent">
+              <label for="id-number" class="form-label">I.D Card Number</label>
+              <input type="text" value="<?php echo $driver['data']['idNumber'] ?>" name="idNumber" id="id-number" class="form-control" placeholder="xxxxxxxxxx" required>
+            </div>
+            <div class="col mb-0" id="inputParent">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" value="<?php echo $driver['data']['email'] ?>" name="driverEmail" id="email" class="form-control" placeholder="xxx@xxxx.xxx" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6 mb-0" id="inputParent">
+              <label for="curAddress" class="form-label">Current Address</label>
+              <input type="text" value="<?php echo isset($driver['data']['curAddress']) ? explode('|', $driver['data']['curAddress'])[0] : '' ?>" name="curAddress" id="curAddress" class="form-control" required>
+            </div>
+            <div class="col-3 mb-0" id="inputParent">
+              <label for="curFrom" class="form-label">From</label>
+              <input type="number" value="<?php echo isset($driver['data']['curAddress']) ? explode('|', $driver['data']['curAddress'])[1] : '' ?>" name="curFrom" id="curFrom" placeholder="yyyy" class="form-control" required>
+            </div>
+            <div class="col-3 mb-0" id="inputParent">
+              <label for="curTo" class="form-label">To</label>
+              <input type="text" value="<?php echo isset($driver['data']['curAddress']) ? explode('|', $driver['data']['curAddress'])[2] : '' ?>" name="curTo" id="curTo" readonly class="form-control">
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <small class=" fw-semibold">Driver Has Previous Addresses?</small>
+            <div class="form-check mt-3">
+              <input name="address-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['prevAddress'] !== NULL ? 'checked' : '' ?> id="defaultRadio1">
+              <label class="form-check-label" for="defaultRadio1">
+                Yes
+              </label>
+            </div>
+            <div class="form-check">
+              <input name="address-radio" class="form-check-input" type="radio" value="no" id="defaultRadio2" <?php echo $driver['data']['prevAddress'] === NULL ? 'checked' : '' ?>>
+              <label class="form-check-label" for="defaultRadio2">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div id="prevAddressDiv">
+            <?php if($driver['data']['prevAddress'] !== NULL && $driver['data']['prevCity'] !== NULL && $driver['data']['prevRegion'] !== NULL): ?>
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevOne" class="form-label">Previous Address One</label>
+                <input name="prevOne" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[0] : '' ?>" type="text" id="prevOne" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom" class="form-label">From</label>
+                <input name="prevFrom1" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[0] : '' ?>" type="number" id="prevFrom1" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo" class="form-label">To</label>
+                <input name="prevTo1" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[0] : '' ?>" type="number" id="prevTo1" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevTwo" class="form-label">Previous Address Two</label>
+                <input name="prevTwo" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[1] : '' ?>" type="text" id="prevTwo" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom2" class="form-label">From</label>
+                <input name="prevFrom2" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[1] : '' ?>" type="number" id="prevFrom2" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo2" class="form-label">To</label>
+                <input name="prevTo2" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[1] : '' ?>" type="number" id="prevTo2" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevThree" class="form-label">Previous Address Three</label>
+                <input name="prevThree" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[2] : '' ?>" type="text" id="prevThree" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom3" class="form-label">From</label>
+                <input name="prevFrom3" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[2] : '' ?>" type="number" id="prevFrom3" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo3" class="form-label">To</label>
+                <input name="prevTo3" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[2] : '' ?>" type="number" id="prevTo3" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+            <?php endif ?>
+          </div>
+
+          <div class="col-md mb-1">
+            <p class=" fw-semibold">In case of emergency, notify:</p>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0" id="inputParent">
+              <label for="notify-name" class="form-label"> Name</label>
+              <input type="text" value="<?php echo isset($driver['data']['emergence']) ? explode('|', $driver['data']['emergence'])[0] : '' ?>" name="notifyName" id="notify-name" class="form-control" placeholder="Enter Name" required>
+            </div>
+            <div class="col mb-0" id="inputParent">
+              <label for="notify-num" class="form-label">Contact Number</label>
+              <input type="number" value="<?php echo isset($driver['data']['emergence']) ? explode('|', $driver['data']['emergence'])[1] : '' ?>" name="nContact" id="email" class="form-control" placeholder="xxxxxxxxxx" required>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="defaultSelect" class="form-label">Position Applying</label>
+              <select id="defaultSelect" name="position" class="form-select" required>
+                <option value="">select</option>
+                <option <?php echo $driver['data']['position'] === 'Taxi' ? 'selected' : '' ?> value="Taxi">Taxi</option>
+                <option <?php echo $driver['data']['position'] === 'Hiring' ? 'selected' : '' ?> value="Hiring">Hiring</option>
+                <option <?php echo $driver['data']['position'] === 'School-pickup' ? 'selected' : '' ?> value="School-pickup">School pickup</option>
+                <option <?php echo $driver['data']['position'] === 'Van-driver' ? 'selected' : '' ?> value="Van-driver">Van driver</option>
+              </select>
+            </div>
+            <div class="col mb-0" id="inputParent">
+              <label for="salary" class="form-label">Expected Salary Per-Month</label>
+              <input type="number" value="<?php echo $driver['data']['salary'] ?>" name="salary" id="salary" class="form-control" placeholder="xxx" required>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <p class=" fw-semibold">Have you worked for this company before?</p>
+            <div class="form-check mt-3">
+              <input name="worked-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['workedInCompany'] !== NULL ? 'checked' : '' ?> id="workedRadio1">
+              <label class="form-check-label" for="workedRadio1">
+                Yes
+              </label>
+            </div>
+            <div class="form-check">
+              <input name="worked-radio" class="form-check-input" type="radio" <?php echo $driver['data']['workedInCompany'] === NULL ? 'checked' : '' ?> value="no" id="workedRadio2">
+              <label class="form-check-label" for="workedRadio2">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div id="workedDiv">
+            <?php if($driver['data']['workedInCompany'] !== NULL): ?>
+              <div class="row g-2 mb-3">
+                <div class="col mb-0" id="inputParent">
+                  <label for="prevFromWorked" class="form-label">From</label>
+                  <input name="prevFromWorked" value="<?php echo isset($driver['data']['workedInCompany']) ? explode('|', $driver['data']['workedInCompany'])[0] : '' ?>" type="number" id="prevFromWorked" class="form-control" placeholder="yyyy" required>
+                </div>
+                <div class="col mb-0" id="inputParent">
+                  <label for="prevToWorked" class="form-label">To</label>
+                  <input name="prevToWorked" value="<?php echo isset($driver['data']['workedInCompany']) ? explode('|', $driver['data']['workedInCompany'])[1] : '' ?>" type="number" id="prevToWorked" class="form-control" placeholder="yyyy" required>
+                </div>
+              </div>
+            <?php endif ?>
+          </div>
+
+          <div class="col-md mb-3">
+            <p class=" fw-semibold">Are you prevented from lawful employment as a driver as profession?</p>
+            <div class="form-check mt-3">
+              <input name="prevented-radio" class="form-check-input" type="radio" <?php echo $driver['data']['preventedLawful'] === 'yes' ? 'checked' : '' ?> value="yes" id="preventedRadio1">
+              <label class="form-check-label" for="preventedRadio1">
+                Yes
+              </label>
+            </div>
+            <div class="form-check">
+              <input name="prevented-radio" class="form-check-input" type="radio" value="no" id="preventedRadio2" <?php echo $driver['data']['preventedLawful'] === 'no' ? 'checked' : '' ?>>
+              <label class="form-check-label" for="preventedRadio2">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <p class=" fw-semibold">Have you ever been convicted of a felony, misdemeanor or criminal violation? </p>
+            <div class="form-check mt-3">
+              <input name="convicted-radio" class="form-check-input" type="radio" value="yes" id="convictedRadio1" <?php echo $driver['data']['convictedFelony'] === 'yes' ? 'checked' : '' ?>>
+              <label class="form-check-label" for="convictedRadio1">
+                Yes
+              </label>
+            </div>
+            <div class="form-check">
+              <input name="convicted-radio" class="form-check-input" type="radio" value="no" id="convictedRadio2"  <?php echo $driver['data']['convictedFelony'] === 'no' ? 'checked' : '' ?>>
+              <label class="form-check-label" for="convictedRadio2">
+                No
+              </label>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <hr  />
+            <h4 class=" fw-semibold mb-2">DRIVER'S LICENSE INFORMATION (This information will be verified)</h4>
+            <div class="col mb-3" id="inputParent">
+              <label for="licenseNo" class="form-label">DRIVER'S LICENSE Number</label>
+              <input name="lNumber" type="text" value="<?php echo isset($driver['data']['drivingLicense']) ? explode('|', $driver['data']['drivingLicense'])[0] : '' ?>" id="licenseNo" class="form-control" placeholder="Enter License No." required>
+            </div>
+            <div class="col mb-3" id="inputParent">
+              <label for="licenseCity" class="form-label">CITY/ TOWN</label>
+              <input name="lCity" type="text" value="<?php echo isset($driver['data']['drivingLicense']) ? explode('|', $driver['data']['drivingLicense'])[1] : '' ?>" id="licenseCity" class="form-control" placeholder="Enter City/ Town" required>
+            </div>
+            <div class="row g-2 mb-3" id="inputParent">
+              <div class="col mb-0" id="inputParent">
+                <label for="licenseExp" class="form-label"> EXPIRATION DATE</label>
+                <input name="lExpDate" value="<?php echo isset($driver['data']['drivingLicense']) ? explode('|', $driver['data']['drivingLicense'])[2] : '' ?>" type="date" id="licenseExp" class="form-control" required>
+              </div>
+              <div class="col mb-0" id="inputParent">
+                <label for="licenseType" class="form-label">LICENSE TYPE</label>
+                <input name="lType" value="<?php echo isset($driver['data']['drivingLicense']) ? explode('|', $driver['data']['drivingLicense'])[3] : '' ?>" type="text" id="licenseType" placeholder="Enter License Type" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <hr />
+            <h4 class=" fw-semibold mb-1">EDUCATION</h4>
+            <div class="row g-2 mb-3">
+              <div class="col mb-0" id="inputParent">
+                <label for="highestEdu" class="form-label"> What is your highest educational attainment?</label>
+                <input name="hEdu" value="<?php echo isset($driver['data']['highestEdu']) ? explode('|', $driver['data']['highestEdu'])[0] : '' ?>" type="text" id="highestEdu" class="form-control" required>
+              </div>
+              <div class="col mb-0" id="inputParent">
+                <label for="eduCompleted" class="form-label">Completed On</label>
+                <input name="compOn" value="<?php echo isset($driver['data']['highestEdu']) ? explode('|', $driver['data']['highestEdu'])[1] : '' ?>" type="number" id="eduCompleted" placeholder="yyyy" class="form-control" required>
+              </div>
+            </div>
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Do you have full knowledge of the Federal Motor Carreer Safety Regulation?  </p>
+              <div class="form-check mt-0">
+                <input name="carreer-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['fullKnowledge'] === 'yes' ? 'checked' : '' ?> id="carreerRadio1">
+                <label class="form-check-label" for="carreerRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="carreer-radio" class="form-check-input" type="radio" value="no" id="carreerRadio2"<?php echo $driver['data']['fullKnowledge'] === 'no' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="carreerRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md mb-3">
+            <hr />
+            <h4 class=" fw-semibold mb-1">DRIVING EXPERIENCE</h4>
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Tractor  </p>
+              <div class="form-check mt-0">
+                <input name="tractor-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['expTractor'] !== NULL ? 'checked' : '' ?> id="tractorRadio1">
+                <label class="form-check-label" for="tractorRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="tractor-radio" class="form-check-input" type="radio" value="no" id="tractorRadio2" <?php echo $driver['data']['expTractor'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="tractorRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div id="tractorDiv">
+              <?php if($driver['data']['expTractor'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="tractorEquipType" class="form-label">Type of Equipment </label>
+                    <input type="text" name="tractorEquipType" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[0] : '' ?>" id="tractorEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="tractorYears" class="form-label">No. of Years</label>
+                    <input name="tractorYears" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[1] : '' ?>" type="number" id="tractorYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="tractorStates" class="form-label">States You Have Driven In</label>
+                    <input name="tractorStates" type="text" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[2] : '' ?>" id="tractorStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+            
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Truck</p>
+              <div class="form-check mt-0">
+                <input name="truck-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['expTruck'] !== NULL ? 'checked' : '' ?> id="truckRadio1">
+                <label class="form-check-label" for="truckRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="truck-radio" class="form-check-input" type="radio" value="no" id="truckRadio2" <?php echo $driver['data']['expTruck'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="truckRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+            
+            <div id="truckDiv">
+              <?php if($driver['data']['expTruck'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="truckEquipType" class="form-label">Type of Equipment </label>
+                    <input name="truckEquipType" type="text" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[0] : '' ?>" id="truckEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="truckYears" class="form-label">No. of Years</label>
+                    <input name="truckYears" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[1] : '' ?>" type="number" id="truckYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="truckStates" class="form-label">States You Have Driven In</label>
+                    <input name="truckStates" type="text" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[2] : '' ?>" id="truckStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Trailer  </p>
+              <div class="form-check mt-0">
+                <input name="trailer-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['expTrailer'] !== NULL ? 'checked' : '' ?> id="trailerRadio1">
+                <label class="form-check-label" for="trailerRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="trailer-radio" class="form-check-input" type="radio" value="no" id="trailerRadio2" <?php echo $driver['data']['expTrailer'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="trailerRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+            
+            <div id="trailerDiv">
+              <?php if($driver['data']['expTrailer'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="trailerEquipType" class="form-label">Type of Equipment </label>
+                    <input name="trailerEquipType" type="text" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[0] : '' ?>" id="trailerEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="trailerYears" class="form-label">No. of Years</label>
+                    <input name="trailerYears" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[1] : '' ?>" type="number" id="trailerYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="trailerStates" class="form-label">States You Have Driven In</label>
+                    <input name="trailerStates" type="text" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[2] : '' ?>" id="trailerStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Bus  </p>
+              <div class="form-check mt-0">
+                <input name="bus-radio" class="form-check-input" type="radio" <?php echo $driver['data']['expBus'] !== NULL ? 'checked' : '' ?> value="yes" id="busRadio1">
+                <label class="form-check-label" for="busRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="bus-radio" class="form-check-input" type="radio" value="no" id="busRadio2" <?php echo $driver['data']['expBus'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="busRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+            
+            <div id="busDiv">
+              <?php if($driver['data']['expBus'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="busEquipType" class="form-label">Type of Equipment </label>
+                    <input name="busEquipType" type="text" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[0] : '' ?>" id="busEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="busYears" class="form-label">No. of Years</label>
+                    <input name="busYears" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[1] : '' ?>" type="number" id="busYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="busStates" class="form-label">States You Have Driven In</label>
+                    <input name="busStates" type="text" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[2] : '' ?>" id="busStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Van  </p>
+              <div class="form-check mt-0">
+                <input name="van-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['expVan'] !== NULL ? 'checked' : '' ?> id="vanRadio1">
+                <label class="form-check-label" for="vanRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="van-radio" class="form-check-input" type="radio" value="no" id="vanRadio2" <?php echo $driver['data']['expVan'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="vanRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+            
+            <div id="vanDiv">
+              <?php if($driver['data']['expVan'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="vanEquipType" class="form-label">Type of Equipment </label>
+                    <input name="vanEquipType" type="text" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[0] : '' ?>" id="vanEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="vanYears" class="form-label">No. of Years</label>
+                    <input name="vanYears" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[1] : '' ?>" type="number" id="vanYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="vanStates" class="form-label">States You Have Driven In</label>
+                    <input name="vanStates" type="text" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[2] : '' ?>" id="vanStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <p class=" fw-semibold">Taxi cab</p>
+              <div class="form-check mt-0">
+                <input name="taxi-radio" class="form-check-input" type="radio" value="yes" <?php echo $driver['data']['expTaxi'] !== NULL ? 'checked' : '' ?> id="taxiRadio1">
+                <label class="form-check-label" for="taxiRadio1">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input name="taxi-radio" class="form-check-input" type="radio" value="no" id="taxiRadio2" <?php echo $driver['data']['expTaxi'] === NULL ? 'checked' : '' ?>>
+                <label class="form-check-label" for="taxiRadio2">
+                  No
+                </label>
+              </div>
+            </div>
+            
+            <div id="taxiDiv">
+              <?php if($driver['data']['expTaxi'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="taxiEquipType" class="form-label">Type of Equipment </label>
+                    <input name="taxiEquipType" type="text" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[0] : '' ?>" id="taxiEquipType" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="taxiYears" class="form-label">No. of Years</label>
+                    <input name="taxiYears" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[1] : '' ?>" type="number" id="taxiYears" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="taxiStates" class="form-label">States You Have Driven In</label>
+                    <input name="taxiStates" type="text" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[2] : '' ?>" id="taxiStates" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <hr />
+              <h4 class=" fw-semibold mb-1">ACCIDENT RECORD LAST 3 YEARS (This information will be verified)</h4>
+              <div class="col-md mb-3">
+                <p class=" fw-semibold mt-2">Any ACCIDENT RECORD LAST 3 YEARS?  </p>
+                <div class="form-check mt-0">
+                  <input name="accident-radio" class="form-check-input" <?php echo $driver['data']['accidentRecord'] !== NULL ? 'checked' : '' ?> type="radio" value="yes" id="accidentRadio1">
+                  <label class="form-check-label" for="accidentRadio1">
+                    Yes
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input name="accident-radio" class="form-check-input" type="radio" value="no" id="accidentRadio2" <?php echo $driver['data']['accidentRecord'] === NULL ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="accidentRadio2">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="accidentDiv">
+              <?php if($driver['data']['accidentRecord'] !== NULL): ?>
+                <div class="row g-2 mb-3">
+                  <div class="mb-0">
+                    <label for="dateAccidentNature" class="form-label">Date of Accident</label>
+                    <input name="dateAccidentNature" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[0] : '' ?>" type="date" id="dateAccidentNature" class="form-control" required>
+                  </div>
+                  <div class="mb-0">
+                    <label for="accidentNature" class="form-label">Nature of Accident</label>
+                    <input name="accidentNature" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[1] : '' ?>" type="text" id="accidentNature" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="fatalities" class="form-label">No. of Fatalities</label>
+                    <input name="fatalities" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[2] : '' ?>" type="number" id="fatalities" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="injuries" class="form-label">No. of Injures</label>
+                    <input name="injuries" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[3] : '' ?>" type="number" id="injuries" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+            </div>
+
+            <div class="col-md mb-3">
+              <hr />
+              <h4 class=" fw-semibold mb-1">TRAFFIC CONVICTIONS LAST 3 YEARS OTHER THAN PARKING (This information will be verified)</h4>
+              <div class="col-md mb-3">
+                <p class=" fw-semibold mt-2">Any TRAFFIC CONVICTIONS LAST 3 YEARS?  </p>
+                <div class="form-check mt-0">
+                  <input name="traffic-radio" class="form-check-input" type="radio" <?php echo $driver['data']['traffic'] !== NULL ? 'checked' : '' ?> value="yes" id="trafficRadio1">
+                  <label class="form-check-label" for="trafficRadio1">
+                    Yes
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input name="traffic-radio" class="form-check-input" type="radio" value="no" id="trafficRadio2"<?php echo $driver['data']['traffic'] === NULL ? 'checked' : '' ?>>
+                  <label class="form-check-label" for="trafficRadio2">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div id="trafficDiv">
+              <?php if($driver['data']['traffic'] !== NULL): ?>
+                <div class="mb-0">
+                  <label for="dateViolation" class="form-label">Date of Violation</label>
+                  <input name="dateViolation" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[0] : '' ?>" type="date" id="dateViolation" class="form-control" required>
+                </div>
+                <div class="row g-2 mb-3">
+                  <div class="col mb-0">
+                    <label for="violation" class="form-label">Violation</label>
+                    <input name="violation" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[1] : '' ?>" type="text" id="violation" class="form-control" required>
+                  </div>
+                  <div class="col mb-0">
+                    <label for="state1" class="form-label">State</label>
+                    <input name="state1" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[2] : '' ?>" type="text" id="state1" class="form-control" required>
+                  </div>
+                  <div class=" mb-0">
+                    <label for="penalty" class="form-label">Penalty</label>
+                    <input name="penalty" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[3] : '' ?>" type="text" id="penalty" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif ?>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="submit" id="updateDriverBtn" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+        </form>
+      <!-- /Account -->
+    </div>
+  </div>
+</div>
+
+
+            
+          </div>
+          <!-- / Content -->
+  <script src="/views/api/drivers.API.js"></script>
+
+<script>
+    const prevAddressDiv = document.getElementById('prevAddressDiv');
+    const workedDiv = document.getElementById('workedDiv');
+    const employedDiv = document.getElementById('employedDiv');
+    const truckDiv = document.getElementById('truckDiv');
+    const tractorDiv = document.getElementById('tractorDiv');
+    const trailerDiv = document.getElementById('trailerDiv');
+    const busDiv = document.getElementById('busDiv');
+    const vanDiv = document.getElementById('vanDiv');
+    const taxiDiv = document.getElementById('taxiDiv');
+    const accidentDiv = document.getElementById('accidentDiv');
+    const trafficDiv = document.getElementById('trafficDiv');
+
+
+    const addressRadio = document.querySelectorAll('[name="address-radio"]');
+    const workedRadio = document.querySelectorAll('[name="worked-radio"]');
+    const employedRadio = document.querySelectorAll('[name="employed-radio"]');
+    const truckRadio = document.querySelectorAll('[name="truck-radio"]');
+    const tractorRadio = document.querySelectorAll('[name="tractor-radio"]');
+    const trailerRadio = document.querySelectorAll('[name="trailer-radio"]');
+    const busRadio = document.querySelectorAll('[name="bus-radio"]');
+    const vanRadio = document.querySelectorAll('[name="van-radio"]');
+    const taxiRadio = document.querySelectorAll('[name="taxi-radio"]');
+    const accidentRadio = document.querySelectorAll('[name="accident-radio"]');
+    const trafficRadio = document.querySelectorAll('[name="traffic-radio"]');
+
+
+    for (let i = 0; i < addressRadio.length; i++) {
+     addressRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          prevAddressDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevOne" class="form-label">Previous Address One</label>
+                <input name="prevOne" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[0] : '' ?>" type="text" id="prevOne" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom" class="form-label">From</label>
+                <input name="prevFrom1" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[0] : '' ?>" type="number" id="prevFrom1" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo" class="form-label">To</label>
+                <input name="prevTo1" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[0] : '' ?>" type="number" id="prevTo1" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevTwo" class="form-label">Previous Address Two</label>
+                <input name="prevTwo" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[1] : '' ?>" type="text" id="prevTwo" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom2" class="form-label">From</label>
+                <input name="prevFrom2" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[1] : '' ?>" type="number" id="prevFrom2" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo2" class="form-label">To</label>
+                <input name="prevTo2" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[1] : '' ?>" type="number" id="prevTo2" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6 mb-0" id="inputParent">
+                <label for="prevThree" class="form-label">Previous Address Three</label>
+                <input name="prevThree" value="<?php echo isset($driver['data']['prevAddress']) ? explode('|', $driver['data']['prevAddress'])[2] : '' ?>" type="text" id="prevThree" class="form-control" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevFrom3" class="form-label">From</label>
+                <input name="prevFrom3" value="<?php echo isset($driver['data']['prevCity']) ? explode('|', $driver['data']['prevCity'])[2] : '' ?>" type="number" id="prevFrom3" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col-3 mb-0" id="inputParent">
+                <label for="prevTo3" class="form-label">To</label>
+                <input name="prevTo3" value="<?php echo isset($driver['data']['prevRegion']) ? explode('|', $driver['data']['prevRegion'])[2] : '' ?>" type="number" id="prevTo3" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+          `;
+        }else{
+          prevAddressDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < workedRadio.length; i++) {
+      workedRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          workedDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+              <div class="col mb-0" id="inputParent">
+                <label for="prevFromWorked" class="form-label">From</label>
+                <input name="prevFromWorked" value="<?php echo isset($driver['data']['workedInCompany']) ? explode('|', $driver['data']['workedInCompany'])[0] : '' ?>" type="number" id="prevFromWorked" class="form-control" placeholder="yyyy" required>
+              </div>
+              <div class="col mb-0" id="inputParent">
+                <label for="prevToWorked" class="form-label">To</label>
+                <input name="prevToWorked" value="<?php echo isset($driver['data']['workedInCompany']) ? explode('|', $driver['data']['workedInCompany'])[1] : '' ?>" type="number" id="prevToWorked" class="form-control" placeholder="yyyy" required>
+              </div>
+            </div>
+          `;
+        }else{
+          workedDiv.innerHTML = '';
+        }
+     });
+      
+    }
+    
+
+    for (let i = 0; i < truckRadio.length; i++) {
+      truckRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          truckDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="truckEquipType" class="form-label">Type of Equipment </label>
+              <input name="truckEquipType" type="text" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[0] : '' ?>" id="truckEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="truckYears" class="form-label">No. of Years</label>
+              <input name="truckYears" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[1] : '' ?>" type="number" id="truckYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="truckStates" class="form-label">States You Have Driven In</label>
+              <input name="truckStates" type="text" value="<?php echo isset($driver['data']['expTruck']) ? explode('|', $driver['data']['expTruck'])[2] : '' ?>" id="truckStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          truckDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < trailerRadio.length; i++) {
+      trailerRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          trailerDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="trailerEquipType" class="form-label">Type of Equipment </label>
+              <input name="trailerEquipType" type="text" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[0] : '' ?>" id="trailerEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="trailerYears" class="form-label">No. of Years</label>
+              <input name="trailerYears" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[1] : '' ?>" type="number" id="trailerYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="trailerStates" class="form-label">States You Have Driven In</label>
+              <input name="trailerStates" type="text" value="<?php echo isset($driver['data']['expTrailer']) ? explode('|', $driver['data']['expTrailer'])[2] : '' ?>" id="trailerStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          trailerDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < tractorRadio.length; i++) {
+      tractorRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          tractorDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="tractorEquipType" class="form-label">Type of Equipment </label>
+              <input type="text" name="tractorEquipType" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[0] : '' ?>" id="tractorEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="tractorYears" class="form-label">No. of Years</label>
+              <input name="tractorYears" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[1] : '' ?>" type="number" id="tractorYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="tractorStates" class="form-label">States You Have Driven In</label>
+              <input name="tractorStates" type="text" value="<?php echo isset($driver['data']['expTractor']) ? explode('|', $driver['data']['expTractor'])[2] : '' ?>" id="tractorStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          tractorDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < busRadio.length; i++) {
+      busRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          busDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="busEquipType" class="form-label">Type of Equipment </label>
+              <input name="busEquipType" type="text" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[0] : '' ?>" id="busEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="busYears" class="form-label">No. of Years</label>
+              <input name="busYears" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[1] : '' ?>" type="number" id="busYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="busStates" class="form-label">States You Have Driven In</label>
+              <input name="busStates" type="text" value="<?php echo isset($driver['data']['expBus']) ? explode('|', $driver['data']['expBus'])[2] : '' ?>" id="busStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          busDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < vanRadio.length; i++) {
+      vanRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          vanDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="vanEquipType" class="form-label">Type of Equipment </label>
+              <input name="vanEquipType" type="text" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[0] : '' ?>" id="vanEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="vanYears" class="form-label">No. of Years</label>
+              <input name="vanYears" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[1] : '' ?>" type="number" id="vanYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="vanStates" class="form-label">States You Have Driven In</label>
+              <input name="vanStates" type="text" value="<?php echo isset($driver['data']['expVan']) ? explode('|', $driver['data']['expVan'])[2] : '' ?>" id="vanStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          vanDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < taxiRadio.length; i++) {
+      taxiRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          taxiDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="taxiEquipType" class="form-label">Type of Equipment </label>
+              <input name="taxiEquipType" type="text" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[0] : '' ?>" id="taxiEquipType" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="taxiYears" class="form-label">No. of Years</label>
+              <input name="taxiYears" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[1] : '' ?>" type="number" id="taxiYears" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="taxiStates" class="form-label">States You Have Driven In</label>
+              <input name="taxiStates" type="text" value="<?php echo isset($driver['data']['expTaxi']) ? explode('|', $driver['data']['expTaxi'])[2] : '' ?>" id="taxiStates" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          taxiDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < accidentRadio.length; i++) {
+      accidentRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          accidentDiv.innerHTML = `
+          <div class="row g-2 mb-3">
+            <div class="mb-0">
+              <label for="dateAccidentNature" class="form-label">Date of Accident</label>
+              <input name="dateAccidentNature" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[0] : '' ?>" type="date" id="dateAccidentNature" class="form-control" required>
+            </div>
+            <div class="mb-0">
+              <label for="accidentNature" class="form-label">Nature of Accident</label>
+              <input name="accidentNature" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[1] : '' ?>" type="text" id="accidentNature" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="fatalities" class="form-label">No. of Fatalities</label>
+              <input name="fatalities" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[2] : '' ?>" type="number" id="fatalities" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="injuries" class="form-label">No. of Injures</label>
+              <input name="injuries" value="<?php echo isset($driver['data']['accidentRecord']) ? explode('|', $driver['data']['accidentRecord'])[3] : '' ?>" type="number" id="injuries" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          accidentDiv.innerHTML = '';
+        }
+     });
+      
+    }
+
+    for (let i = 0; i < trafficRadio.length; i++) {
+      trafficRadio[i].addEventListener('change', (e) => {
+        if(e.target.value === 'yes'){
+          trafficDiv.innerHTML = `
+          <div class="mb-0">
+            <label for="dateViolation" class="form-label">Date of Violation</label>
+            <input name="dateViolation" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[0] : '' ?>" type="date" id="dateViolation" class="form-control" required>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col mb-0">
+              <label for="violation" class="form-label">Violation</label>
+              <input name="violation" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[1] : '' ?>" type="text" id="violation" class="form-control" required>
+            </div>
+            <div class="col mb-0">
+              <label for="state1" class="form-label">State</label>
+              <input name="state1" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[2] : '' ?>" type="text" id="state1" class="form-control" required>
+            </div>
+            <div class=" mb-0">
+              <label for="penalty" class="form-label">Penalty</label>
+              <input name="penalty" value="<?php echo isset($driver['data']['traffic']) ? explode('|', $driver['data']['traffic'])[3] : '' ?>" type="text" id="penalty" class="form-control" required>
+            </div>
+          </div>
+          `;
+        }else{
+          trafficDiv.innerHTML = '';
+        }
+     });
+      
+    }
+  </script>    
+
+<!-- Footer -->
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+  
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  
+  <!-- Place this tag in your head or just before your close body tag. -->
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/pages-account-settings-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:07 GMT -->
+</html>

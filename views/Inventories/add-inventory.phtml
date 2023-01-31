@@ -1,0 +1,145 @@
+<?php  
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+  include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
+  return;
+endif;
+ include  $_SERVER['DOCUMENT_ROOT'].'/views/components/header.phtml'; ?>
+ <style>
+    input:focus:required:invalid {border: 1px solid red;}
+    input:required:valid { border: 1px solid #d9dee3; }
+    select:focus:required:invalid {border: 1px solid red;}
+    select:required:valid { border: 1px solid #d9dee3; }
+    textarea:focus:required:invalid {border: 1px solid red;}
+    textarea:required:valid { border: 1px solid #d9dee3; }
+</style>
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+
+        <!-- Content -->
+        
+          <div class="container-xxl flex-grow-1 container-p-y">
+            
+            
+<h4 class="fw-bold py-3 mb-4">
+  <span class="text-muted fw-light">Inventories /</span> Add Inventory
+</h4>
+
+<div class="row">
+  <div class="col-md-12">
+      <form id="addInventoryFrom">
+        <div class="card p-5">
+        <span id="errDiv"></span>
+        <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img src="/uploads/inventory/inventory.png" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+            <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                <span class="d-none d-sm-block">Upload inventory photo</span>
+                <i class="bx bx-upload d-block d-sm-none"></i>
+                <input type="file" name="photo" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+                </label>
+                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                <i class="bx bx-reset d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Reset</span>
+                </button>
+
+                <p class="text-muted mb-0">Allowed JPG or PNG. Max size of 800K</p>
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col mb-3">
+            <label for="inventoryName" class="form-label">Inventory Name</label>
+            <input type="text" name="inventoryName" id="inventoryName" class="form-control" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col mb-3">
+            <label for="vehicleBrand" class="form-label">Vehicle Brand</label>
+            <input type="text" name="vehicleBrand" id="vehicleBrand" class="form-control" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col mb-3">
+            <label for="inventoryCondition" class="form-label">Condition</label>
+            <select id="inventoryCondition" name="inventoryCondition" class="form-select" required>
+                <option value="">Select...</option>
+                <option value="new">New</option>
+                <option value="reuse">Reuse</option>
+            </select>
+            </div>
+            <div class="col mb-0">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <button type="submit" id="addBtn" class="btn btn-primary me-2">Add Inventory</button>
+        </div>
+        </div>
+    </form>
+  </div>
+</div>
+
+
+            
+          </div>
+          <!-- / Content -->
+
+          
+          
+
+<!-- Footer -->
+<script src="/views/api/inventory.API.js"></script>
+
+<?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+  </div>
+  <!-- / Layout wrapper -->
+  
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
+  <script src="/views/assets/vendor/libs/popper/popper.js"></script>
+  <script src="/views/assets/vendor/js/bootstrap.js"></script>
+  <script src="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  
+  <script src="/views/assets/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  
+  
+
+  <!-- Main JS -->
+  <script src="/views/assets/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="/views/assets/js/pages-account-settings-account.js"></script>
+  
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/pages-account-settings-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:07 GMT -->
+</html>

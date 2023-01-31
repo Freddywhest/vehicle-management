@@ -1,0 +1,356 @@
+<?php
+  if(isset($_SESSION['userUuid'], $_SESSION['userEmail'], $_SESSION['userRole']) && isset($_COOKIE['userUuid'])){
+    $_SESSION['curUrl'] = $_SERVER['PHP_SELF'];
+    $pageArray = explode('/', $_SERVER['PHP_SELF']);
+    $pageName = str_replace('-', ' ', str_replace('/', '',$_SERVER['PHP_SELF']));
+    if(count($pageArray) > 2){
+      $pageName2 = 'Edit '.ucwords($pageArray[1]);
+    }else{
+      $pageName2 = strlen($pageName) < 1 ? 'Dashboard' : ucwords($pageName);
+    }
+    $loggedInUser = LoginUser::getLoginUser();
+    if($loggedInUser['userDefaultPass'] === 'yes'){
+      include  $_SERVER['DOCUMENT_ROOT'].'/views/Authentication/forgottenPassword.phtml';
+      exit();
+    }
+
+  }else{
+    $_SESSION['prevUrl'] = $_SERVER['PHP_SELF'];
+    header('Location: /login');
+    die();
+  }
+?>
+
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed " dir="ltr" data-theme="theme-default" data-assets-path="/views/assets/" data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title><?php echo $pageName2 ?> - <?php echo isset(Settings::$getSiteName) ? Settings::$getSiteName : '';?></title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/uploads/logos/<?php echo isset(Settings::$getLogo) ? Settings::$getLogo : ''?>" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap" rel="stylesheet">
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="/views/assets/vendor/fonts/boxicons.css" />
+    
+    
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/views/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/views/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/views/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/views/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    
+    <link rel="stylesheet" href="/views/assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+    
+    <!-- Helpers -->
+    <script src="/views/assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="/views/assets/js/config.js"></script>
+</head>
+
+<body>
+
+  <!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar  ">
+  <div class="layout-container">
+
+<!-- Menu -->
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+  <div class="app-brand demo ">
+    <a href="/" class="app-brand-link">
+      <img width="40" height="40" src="/uploads/logos/<?php echo isset(Settings::$getLogo) ? Settings::$getLogo : '' ?>" alt="">
+    </a>
+
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  <?php if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'): ?>
+  <?php endif ?>
+
+  <ul class="menu-inner py-1">
+
+    <!-- Dashboard -->
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/' ? 'active open' : ''?>">
+      <a href="/" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div data-i18n="Dashboard">Dashboard</div>
+      </a>
+    </li>
+
+    <?php if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'): ?>
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/workers' ||  $_SERVER['PHP_SELF'] === '/drivers' ? 'active open' : ''?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div data-i18n="Account Settings">Users</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/workers' ? 'active open' : ''?>">
+          <a href="/workers" class="menu-link">
+            <div data-i18n="Workers">Workers</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/drivers' ? 'active open' : ''?>">
+          <a href="/drivers" class="menu-link">
+            <div data-i18n="Drivers">Drivers</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- Components -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text"></span></li>
+
+    <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/vehicles' ? 'active' : ''?>">
+      <a href="/vehicles" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-car"></i>
+        <div data-i18n="Vehicles">Vehicles</div>
+      </a>
+    </li>
+    <!-- Cards -->
+    <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/inventories' ||  $_SERVER['PHP_SELF'] === '/add-inventory' ? 'active open' : ''?>">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-collection"></i>
+        <div data-i18n="Inventories">Inventories</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/add-inventory' ? 'active open' : ''?>">
+          <a href="/add-inventory" class="menu-link">
+            <div data-i18n="Add Inventories">Add Inventories</div>
+          </a>
+        </li>
+        <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/inventories' ? 'active open' : ''?>">
+          <a href="/inventories" class="menu-link">
+            <div data-i18n="All Inventories">All Inventories</div>
+          </a>
+        </li>
+        
+      </ul>
+    </li>
+
+    <!-- User interface -->
+    <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/expenses' ||  $_SERVER['PHP_SELF'] === '/add-expense' ? 'active open' : ''?>">
+      <a href="javascript:void(0)" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-box"></i>
+        <div data-i18n="Workshop Expenses">Workshop Expenses</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/add-expense' ? 'active open' : ''?>">
+          <a href="/add-expense" class="menu-link">
+            <div data-i18n="Add Expense">Add Expense</div>
+          </a>
+        </li>
+        <li class="menu-item  <?php echo $_SERVER['PHP_SELF'] === '/expenses' ? 'active open' : ''?>">
+          <a href="/expenses" class="menu-link">
+            <div data-i18n="All Expenses">All Expenses</div>
+          </a>
+        </li>
+        
+      </ul>
+    </li>
+
+    <!-- Forms & Tables -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text"></span></li>
+    <!-- Forms -->
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/bank-transactions' || $_SERVER['PHP_SELF'] === '/bank-deposit' || $_SERVER['PHP_SELF'] === '/bank-withdraw' ? 'active open' : ''?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bxs-bank"></i>
+        <div data-i18n="Form Elements">Bank Transactions</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/bank-deposit' ? 'active open' : ''?>">
+          <a href="/bank-deposit" class="menu-link">
+            <div data-i18n="Bank Deposit">Bank Deposit</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/bank-withdraw' ? 'active open' : ''?>">
+          <a href="/bank-withdraw" class="menu-link">
+            <div data-i18n="Bank Withdraw">Bank Withdraw</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/bank-transactions' ? 'active open' : ''?>">
+          <a href="/bank-transactions" class="menu-link">
+            <div data-i18n="Bank Transactions">Bank Transactions</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <?php endif ?>
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/sales' ||  $_SERVER['PHP_SELF'] === '/add-sale' ? 'active open' : ''?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-money"></i>
+        <div data-i18n="Form Layouts">Sales</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/add-sale' ? 'active open' : ''?>">
+          <a href="/add-sale" class="menu-link">
+            <div data-i18n="Add Sale">Add Sales</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/sales' ? 'active open' : ''?>">
+          <a href="/sales" class="menu-link">
+            <div data-i18n="All Sales">All Sales</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+  <?php if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'): ?>
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/pay-worker' || $_SERVER['PHP_SELF'] === '/pay-driver' || $_SERVER['PHP_SELF'] === '/salaries' ? 'active open' : ''?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-dollar"></i>
+        <div data-i18n="Salary">Salary</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/pay-worker' ? 'active open' : ''?>">
+          <a href="/pay-worker" class="menu-link">
+            <div data-i18n="Pay Salary">Pay Worker</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/pay-driver' ? 'active open' : ''?>">
+          <a href="/pay-driver" class="menu-link">
+            <div data-i18n="Pay Salary">Pay Driver</div>
+          </a>
+        </li>
+        <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/salaries' ? 'active open' : ''?>">
+          <a href="/salaries" class="menu-link">
+            <div data-i18n="All Paid Salaries">All Paid Salaries</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Misc -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text"></span></li>
+    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>">
+      <a href="/settings" class="menu-link" <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>>
+        <i class="menu-icon tf-icons bx bx-cog"></i>
+        <div data-i18n="Website Settings">Website Settings</div>
+      </a>
+    </li>
+    <?php endif ?>
+  </ul>
+
+</aside>
+<!-- / Menu -->
+
+    
+
+    <!-- Layout container -->
+    <div class="layout-page">
+      
+      
+
+
+
+<!-- Navbar -->
+
+
+
+
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+  
+
+  
+
+  
+
+      
+      
+
+      
+      
+      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0   d-xl-none ">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+          <i class="bx bx-menu bx-sm"></i>
+        </a>
+      </div>
+      
+
+      <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+        
+
+
+        
+        <!-- Search -->
+        <div class="navbar-nav align-items-center">
+        </div>
+        <!-- /Search -->
+        
+
+        <ul class="navbar-nav flex-row align-items-center ms-auto">
+   
+
+          <!-- User -->
+          <li class="nav-item navbar-dropdown dropdown-user dropdown">
+            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+              <div class="avatar avatar-online">
+                <img src="/uploads/users/<?php echo isset($loggedInUser['photo']) ? $loggedInUser['photo'] : '' ?>" alt class="w-px-40 h-px-40 rounded-circle">
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="/profile">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0 me-3">
+                      <div class="avatar avatar-online">
+                        <img src="/uploads/users/<?php echo isset($loggedInUser['photo']) ? $loggedInUser['photo'] : '' ?>" alt class="w-px-40 h-px-40 rounded-circle">
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <span class="fw-semibold d-block"><?php echo isset($loggedInUser['fullName']) ? $loggedInUser['fullName'] : '' ?></span>
+                      <small class="text-muted"><?php echo isset($loggedInUser['userRole']) ? $loggedInUser['userRole'] : '' ?></small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/profile">
+                  <i class="bx bx-user me-2"></i>
+                  <span class="align-middle">My Profile</span>
+                </a>
+              </li>
+             
+              <li>
+                <a class="dropdown-item" href="/logout">
+                  <i class="bx bx-power-off me-2"></i>
+                  <span class="align-middle">Log Out</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!--/ User -->
+          
+
+        </ul>
+      </div>
+
+      
+      
+  </nav>
+  
+
+  
+<!-- / Navbar -->
+
+    
