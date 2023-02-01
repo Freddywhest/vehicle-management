@@ -2,7 +2,7 @@
 session_start();
 include $_SERVER['DOCUMENT_ROOT'].'/vendor/autoloader.php';
 
-if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php') && class_exists('DataBase') && Settings::getSettings() !== NULL){
+if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/DataBase.Class.php') && class_exists('DataBase') && Settings::getSettings() !== NULL){
     Settings::getSettings();
     if(isset($_SESSION['userUuid'], $_SESSION['userEmail'], $_SESSION['userRole']) && isset($_COOKIE['userUuid'])){
         $loggedInUser = LoginUser::getLoginUser();

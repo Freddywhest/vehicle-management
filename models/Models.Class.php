@@ -35,6 +35,11 @@ declare(strict_types = 1);
             return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
         }
 
+        public static function dropTable(){
+            $dropDatabase = "DROP DATABASE IF EXISTS `bank`, `drivers`, `inventory`, `salary`, `sales`, `settings`, `users`, `vehicles`, `workshop`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
+        }
         
         static public function users(){
             self::$tableName = 'users';

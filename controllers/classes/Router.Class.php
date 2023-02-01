@@ -49,7 +49,7 @@ class Router{
 
     public function handler($uriPath){
         $this->routeFound = null;
-        if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php') && class_exists('DataBase')){
+        if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/DataBase.Class.php')){
             if(class_exists('DataBase')){
                 $this->installed = true;
             }else{
