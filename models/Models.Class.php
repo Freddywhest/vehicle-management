@@ -236,14 +236,15 @@ declare(strict_types = 1);
         static public function addUser(){
             $passHash = password_hash(self::$userPass, PASSWORD_DEFAULT);
             $myuuid = self::guidv4();
-            $addUser = "INSERT INTO users(userEmail, fullName, userPassword, userUuid, userRole) VALUES (:uemail, :uname, :upass, :uuid, :urole)";
+            $addUser = "INSERT INTO users(userEmail, fullName, userPassword, userUuid, userRole, userDefaultPass) VALUES (:uemail, :uname, :upass, :uuid, :urole, :userDefaultPass)";
             $addUserStmt = self::$pdo->prepare($addUser);
             $addUserStmt->execute([
                 ':uemail' => self::$userEmail,
                 ':uname' => self::$userName,
                 ':upass' => $passHash,
                 ':uuid' => $myuuid,
-                ':urole' => 'superAdmin'
+                ':urole' => 'superAdmin',
+                ':userDefaultPass' => 'no'
             ]);
         }
 
