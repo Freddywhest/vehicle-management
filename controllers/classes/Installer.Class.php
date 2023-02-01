@@ -25,10 +25,18 @@
                 $database = "CREATE DATABASE IF NOT EXISTS `".self::$dbName."`";
                 $databaseStmt = self::$pdo->prepare($database);
                 $databaseStmt->execute();
+            } catch (PDOException $e) {
+                RequestError::error("An error occurred while creating the database, Please check if the Database information/credentials provided is correct!");
+                if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php')){
+                    unlink($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php');
+                }
+            }
+        }
 
-                self::$fileName = fopen($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php', 'w');
-                fwrite(self::$fileName, 
-                '<'.'?php 
+        static public function installDataBase(){
+            self::$fileName = fopen($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php', 'w');
+            fwrite(self::$fileName, 
+                '<?php 
                 declare(strict_types = 1);
                 class DataBase {
                     protected static $pdo;
@@ -37,7 +45,7 @@
                     protected $dbpass;
                     protected $host;
                     protected $dsn;
-                
+
                     public function __construct(){
                         try {
                             $this->dbname = \''.self::$dbName.'\';
@@ -47,23 +55,12 @@
                             $this->dsn = "mysql:dbname={$this->dbname};host={$this->host}";
                             self::$pdo = new PDO($this->dsn, $this->dbuser, $this->dbpass);
                             self::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
-                
+
                         } catch (PDOException $e) {
                             header(\'/\');
                         }
                     }
                 }');
-            } catch (PDOException $e) {
-                RequestError::error("An error occurred while creating the database, Please check if the Database information/credentials provided is correct!");
-                if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php')){
-                    unlink($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php');
-                }
-                die();
-            }
-        }
-
-        static public function installDataBase(){
-           
         }
 
         public function __destruct(){
