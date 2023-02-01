@@ -10,7 +10,8 @@ const dbUser = document.querySelector('[data-db="user"]'),
       siteLogo = document.querySelector('[data-site="logo"]'),
       installBtn = document.querySelector('[data-install="btn"]'),
       errorDiv = document.querySelector('[class="alert-box red"]'),
-      imgPreview = document.querySelector('[data-site="img-preview"]');
+      imgPreview = document.querySelector('[data-site="img-preview"]'),
+      inputs = document.querySelectorAll('input');
 
 let form;
 
@@ -23,7 +24,7 @@ const errorMsg = (message) => {
 }
 
 const request = {
-    install : () => {
+    install : async() => {
         form = new FormData();
         form.append('dbUser', dbUser.value);
         form.append('dbHost', dbHost.value);
@@ -37,37 +38,47 @@ const request = {
         form.append('siteLogo', siteLogo.files[0]);
         form.append('install', true);
 
-        fetch('/installation', {
-            method: 'POST',
-            body: form
-        })
-        .then(response => response.json())
-        .then((result) => {
-            console.log(result);
-            if(result.status){
+        try {
+            const postRequest = await fetch('/installation', {
+                method: 'POST',
+                body: form
+            });
+            const response = await postRequest.json();
+            if(response.status){
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
-                  })
-                customAlert.alert(result.message);
+                    })
+                customAlert.alert(response.message);
                 setTimeout(() => {
                     location.href = '/';
-                }, 4000);
+                }, 3000);
             }else{
-                errorMsg(result.message);
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                    errorDiv.innerText = '';
-                }, 3500);
+                errorMsg(response.message);
             }
-        })
-        .catch(err => alert(err));
+        } catch (e) {
+            alert(e.message);
+        }
+       
     }
 }
 
-installBtn.addEventListener('click', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
+    inputs.forEach((input) => {
+        input.addEventListener('input', () => {
+            errorDiv.style.display = 'none';
+            errorDiv.innerText = '';
+        })
+    })
+})
+
+installBtn.addEventListener('click', async function (e){
     e.preventDefault();
-    request.install();
+    this.setAttribute('disabled', true);
+    this.innerText = 'Loading.....';
+    await request.install();
+    this.removeAttribute('disabled');
+    this.innerText = 'Install';
 });
 
 siteLogo.addEventListener('change', ()=> {

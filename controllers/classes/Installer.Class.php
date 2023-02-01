@@ -26,10 +26,11 @@
                 $databaseStmt = self::$pdo->prepare($database);
                 $databaseStmt->execute();
             } catch (PDOException $e) {
-                die ($e);
+                RequestError::error("An error occurred while creating the database, Please check if the Database information/credentials provided is correct!");
                 if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php')){
                     unlink($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php');
                 }
+                exit();
             }
         }
 

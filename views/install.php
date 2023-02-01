@@ -71,7 +71,7 @@
     </div>
     </div>
     <div class="button">
-      <input type="submit" data-install="btn" value="Install">
+      <button type="submit" data-install="btn">Install</button>
     </div>
   </form>
 </div>

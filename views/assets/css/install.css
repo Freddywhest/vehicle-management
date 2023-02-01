@@ -182,7 +182,7 @@
     margin: 45px 0;
   }
   
-  form .button input {
+  form .button button {
     cursor: pointer;
     height: 100%;
     width: 100%;
@@ -196,7 +196,7 @@
     transition: all 0.3s ease;
   }
   
-  form .button input:hover {
+  form .button button:hover {
     background: linear-gradient(-135deg, var(--main-blue), var(--main-purple));
   }
   
@@ -226,6 +226,7 @@ display: none;
 position: fixed;
 width: 100%;
 top: 0;
+z-index: 1000;
 padding: 8px 7px;
 font-weight: 400;
 font-size: 15px;
