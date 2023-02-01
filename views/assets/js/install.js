@@ -38,12 +38,13 @@ const request = {
         form.append('siteLogo', siteLogo.files[0]);
         form.append('install', true);
 
-        try {
+        /* try { */
             const postRequest = await fetch('/installation', {
                 method: 'POST',
                 body: form
             });
             const response = await postRequest.json();
+            console.log(response);
             if(response.status){
                 window.scrollTo({
                     top: 0,
@@ -56,9 +57,9 @@ const request = {
             }else{
                 errorMsg(response.message);
             }
-        } catch (e) {
+        /* } catch (e) {
             console.log(e);
-        }
+        } */
        
     }
 }
