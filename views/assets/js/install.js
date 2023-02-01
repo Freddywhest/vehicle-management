@@ -57,7 +57,7 @@ const request = {
                 errorMsg(response.message);
             }
         } catch (e) {
-            alert(e.message);
+            console.log(e.message);
         }
        
     }
