@@ -18,9 +18,9 @@
                 $this->dsn = "mysql:host=".self::$dbHost."";
                 self::$pdo = new PDO($this->dsn, self::$dbUser, self::$dbPass);
 
-                /* $dropDatabase = "DROP DATABASE IF EXISTS `".self::$dbName."`";
+                $dropDatabase = "DROP DATABASE IF EXISTS `".self::$dbName."`";
                 $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
-                $dropDatabaseStmt->execute(); */
+                $dropDatabaseStmt->execute();
 
                 $database = "CREATE DATABASE IF NOT EXISTS `".self::$dbName."`";
                 $databaseStmt = self::$pdo->prepare($database);

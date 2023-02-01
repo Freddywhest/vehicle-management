@@ -79,7 +79,7 @@ if(class_exists('Installer')){
            Installer::installDataBase();
            new Installer();
            
-           Models::$userName = htmlspecialchars($userName);
+           /* Models::$userName = htmlspecialchars($userName);
            Models::$userPass = $userPass;
            Models::$userEmail = $userEmail;
            Models::$siteLogo = $siteLogo ;
@@ -96,7 +96,7 @@ if(class_exists('Installer')){
            Models::workShop();
            Models::websiteSettings();
            Models::addUser();
-           Models::addWebsite();
+           Models::addWebsite(); */
 
 
            $status = true;
