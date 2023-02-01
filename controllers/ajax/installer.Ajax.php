@@ -86,7 +86,6 @@ if(class_exists('Installer')){
            Models::$siteName = htmlspecialchars($siteName);
            new Models();
            
-           Models::dropTable();
            Models::users();
            Models::drivers();
            Models::vehicles();
