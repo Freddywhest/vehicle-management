@@ -55,33 +55,66 @@
 
         public static function getSales(){
             (new self)->__construct();
-            if(self::$filter === 'all'){
-                $total = "SELECT salesUuid FROM sales";
-            }elseif(self::$filter === 'today'){
-                $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE()";
+            if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'){
+                if(self::$filter === 'all'){
+                    $total = "SELECT salesUuid FROM sales";
+                }elseif(self::$filter === 'today'){
+                    $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE()";
+                }else{
+                    $total = "SELECT salesUuid FROM sales";
+                }
+                $totalStmt = self::$pdo->prepare($total);
+                $totalStmt->execute();
             }else{
-                $total = "SELECT salesUuid FROM sales";
+                if(self::$filter === 'all'){
+                    $total = "SELECT salesUuid FROM sales WHERE recordedBy =:recordedBy";
+                }elseif(self::$filter === 'today'){
+                    $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE() AND recordedBy =:recordedBy";
+                }else{
+                    $total = "SELECT salesUuid FROM sales AND recordedBy =:recordedBy";
+                }
+                $totalStmt = self::$pdo->prepare($total);
+                $totalStmt->execute([
+                    ':recordedBy' => $_SESSION['userUuid']
+                ]);
+
             }
-            $totalStmt = self::$pdo->prepare($total);
-            $totalStmt->execute();
+
             $totalSales = $totalStmt->rowCount();
 
             $perPage = 5;
             $totalPages = ceil($totalSales/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
-            if(self::$filter === 'all'){
-                $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
-            }elseif(self::$filter === 'today'){
-                $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() ORDER BY sales.id DESC LIMIT :s, :t";
+            if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'){
+                if(self::$filter === 'all'){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }elseif(self::$filter === 'today'){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() ORDER BY sales.id DESC LIMIT :s, :t";
+                }else{
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }
+                $salesStmt = self::$pdo->prepare($sales);
+                $salesStmt->execute([
+                    ':s' => $offset,
+                    ':t' => $perPage
+                ]);
             }else{
-                $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                if(self::$filter === 'all'){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }elseif(self::$filter === 'today'){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() AND sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }else{
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }
+                $salesStmt = self::$pdo->prepare($sales);
+                $salesStmt->execute([
+                    ':recordedBy' => $_SESSION['recordedBy'],
+                    ':s' => $offset,
+                    ':t' => $perPage
+                ]);
             }
-            $salesStmt = self::$pdo->prepare($sales);
-            $salesStmt->execute([
-                ':s' => $offset,
-                ':t' => $perPage
-            ]);
+            
 
             $data = $salesStmt->fetchAll(PDO::FETCH_ASSOC);
 
