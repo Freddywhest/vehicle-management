@@ -76,8 +76,8 @@ if(class_exists('Installer')){
            Installer::$dbHost = htmlspecialchars($dbHost);
            Installer::$dbPass = $dbPass;
            Installer::$dbName = htmlspecialchars($dbName);
-           new Installer();
            Installer::installDataBase();
+           new Installer();
            
            Models::$userName = htmlspecialchars($userName);
            Models::$userPass = $userPass;
