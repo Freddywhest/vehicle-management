@@ -83,8 +83,6 @@
 
   <div class="menu-inner-shadow"></div>
 
-  <?php if($_SESSION['userRole'] === 'admin' || $_SESSION['userRole'] === 'superAdmin'): ?>
-  <?php endif ?>
 
   <ul class="menu-inner py-1">
 
@@ -237,13 +235,16 @@
     </li>
 
     <!-- Misc -->
-    <li class="menu-header small text-uppercase"><span class="menu-header-text"></span></li>
-    <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>">
-      <a href="/settings" class="menu-link" <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>>
-        <i class="menu-icon tf-icons bx bx-cog"></i>
-        <div data-i18n="Website Settings">Website Settings</div>
-      </a>
-    </li>
+    
+    <?php if($_SESSION['userRole'] === 'superAdmin'): ?>
+      <li class="menu-header small text-uppercase"><span class="menu-header-text"></span></li>
+      <li class="menu-item <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>">
+        <a href="/settings" class="menu-link" <?php echo $_SERVER['PHP_SELF'] === '/settings' ? 'active open' : ''?>>
+          <i class="menu-icon tf-icons bx bx-cog"></i>
+          <div data-i18n="Website Settings">Website Settings</div>
+        </a>
+      </li>
+    <?php endif ?>
     <?php endif ?>
   </ul>
 

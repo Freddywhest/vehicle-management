@@ -143,7 +143,7 @@ endif;
                 <select id="defaultSelectRole" name="workerRole" class="form-select" required>
                   <option value="">select</option>
                   <option value="attendant">Attendant</option>
-                  <?php if($_SESSION['userRole'] === 'superAmin'): ?>
+                  <?php if($_SESSION['userRole'] === 'superAdmin'): ?>
                   <option value="admin">Admin</option>
                   <?php endif ?>
                 </select>

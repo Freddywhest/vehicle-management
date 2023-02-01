@@ -1,5 +1,5 @@
 <?php  
-if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin' && $_SESSION['userRole'] !== 'admin'):
+if(isset($_SESSION['userRole']) && $_SESSION['userRole'] !== 'superAdmin'):
   include  $_SERVER['DOCUMENT_ROOT'].'/views/404.php';
   return;
 endif;
