@@ -25,43 +25,45 @@
                 $database = "CREATE DATABASE IF NOT EXISTS `".self::$dbName."`";
                 $databaseStmt = self::$pdo->prepare($database);
                 $databaseStmt->execute();
+
+                self::$fileName = fopen($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php', 'w');
+                fwrite(self::$fileName, 
+                '<'.'?php 
+                declare(strict_types = 1);
+                class DataBase {
+                    protected static $pdo;
+                    protected $dbname;
+                    protected $dbuser;
+                    protected $dbpass;
+                    protected $host;
+                    protected $dsn;
+                
+                    public function __construct(){
+                        try {
+                            $this->dbname = \''.self::$dbName.'\';
+                            $this->host = \''.self::$dbHost.'\';
+                            $this->dbuser = \''.self::$dbUser.'\';
+                            $this->dbpass = \''.self::$dbPass.'\';
+                            $this->dsn = "mysql:dbname={$this->dbname};host={$this->host}";
+                            self::$pdo = new PDO($this->dsn, $this->dbuser, $this->dbpass);
+                            self::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
+                
+                        } catch (PDOException $e) {
+                            header(\'/\');
+                        }
+                    }
+                }');
             } catch (PDOException $e) {
                 RequestError::error("An error occurred while creating the database, Please check if the Database information/credentials provided is correct!");
                 if(file_exists($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php')){
                     unlink($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php');
                 }
-                exit();
+                die();
             }
         }
 
         static public function installDataBase(){
-            self::$fileName = fopen($_SERVER['DOCUMENT_ROOT'].'/controllers/classes/database.Class.php', 'w');
-            fwrite(self::$fileName, 
-'<?php 
-declare(strict_types = 1);
-class DataBase {
-    protected static $pdo;
-    protected $dbname;
-    protected $dbuser;
-    protected $dbpass;
-    protected $host;
-    protected $dsn;
-
-    public function __construct(){
-        try {
-            $this->dbname = \''.self::$dbName.'\';
-            $this->host = \''.self::$dbHost.'\';
-            $this->dbuser = \''.self::$dbUser.'\';
-            $this->dbpass = \''.self::$dbPass.'\';
-            $this->dsn = "mysql:dbname={$this->dbname};host={$this->host}";
-            self::$pdo = new PDO($this->dsn, $this->dbuser, $this->dbpass);
-            self::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false );
-
-        } catch (PDOException $e) {
-            header(\'/\');
-        }
-    }
-}');
+           
         }
 
         public function __destruct(){
