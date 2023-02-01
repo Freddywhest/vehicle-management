@@ -34,15 +34,13 @@ declare(strict_types = 1);
             // Output the 36 character UUID.
             return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
         }
-
-        public static function dropTable(){
-            $dropDatabase = "DROP DATABASE IF EXISTS `bank`, `drivers`, `inventory`, `salary`, `sales`, `settings`, `users`, `vehicles`, `workshop`";
-            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
-            $dropDatabaseStmt->execute();
-        }
         
         static public function users(){
             self::$tableName = 'users';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $users = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -85,6 +83,10 @@ declare(strict_types = 1);
         
         static public function drivers(){
             self::$tableName = 'drivers';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $drivers = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -130,6 +132,10 @@ declare(strict_types = 1);
         
         static public function vehicles(){
             self::$tableName = 'vehicles';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $vehicles = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -158,6 +164,10 @@ declare(strict_types = 1);
         
         static public function sales(){
             self::$tableName = 'sales';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $sales = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -175,6 +185,10 @@ declare(strict_types = 1);
 
         static public function bank(){
             self::$tableName = 'bank';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $bank = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -192,6 +206,10 @@ declare(strict_types = 1);
 
         static public function salary(){
             self::$tableName = 'salary';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $salary = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -208,6 +226,10 @@ declare(strict_types = 1);
 
         static public function inventory(){
             self::$tableName = 'inventory';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $inventory = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
@@ -225,6 +247,10 @@ declare(strict_types = 1);
 
         static public function workShop(){
             self::$tableName = 'workshop';
+
+            $dropDatabase = "DROP TABLE IF EXISTS `".self::$tableName."`";
+            $dropDatabaseStmt = self::$pdo->prepare($dropDatabase);
+            $dropDatabaseStmt->execute();
             $workshop = "CREATE TABLE IF NOT EXISTS 
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
