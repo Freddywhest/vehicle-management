@@ -140,14 +140,14 @@ endif;
           <?php if($vehicle['data']['driverFullName']): ?>
               <br /> <span class="mb-3">Driver's Name:  <strong><?php echo $vehicle['data']['driverFullName'] ?></strong></span>
             <?php endif ?>
-          <input type="text" name="drivenBy" value="<?php echo $vehicle['data']['driverIdNo'] ? $vehicle['data']['driverIdNo'] : 'No driver';?>" id="drivenBy" class="form-control" placeholder="" required>
+          <input type="text" name="drivenBy" value="<?php echo $vehicle['data']['driverIdNo'] ? $vehicle['data']['driverIdNo'] : 'No driver';?>" id="drivenBy" class="form-control" placeholder="">
         </div>
       </div>
 
       <div class="row g-2 mb-3">
         <div class="mb-0">
           <label for="other" class="form-label"> OTHER VEHICLE INFORMATION <br><span class="text-danger">(Note: Please type in [-] if these is no other information.)</span></label></label>
-          <textarea name="other" id="other" class="form-control" required><?php echo $vehicle['data']['other'];?></textarea>
+          <textarea name="other" id="other" class="form-control"><?php echo $vehicle['data']['other'];?></textarea>
         </div>
       </div>
 

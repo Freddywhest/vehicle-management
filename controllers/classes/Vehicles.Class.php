@@ -62,7 +62,7 @@
             $driverUuid = $driverStmt->fetch(PDO::FETCH_ASSOC);
             
 
-            $add = "INSERT INTO vehicles(photo, model, color, vtype, engineNo, trans, axle, paint, trim, chasis, converted, drivenBy, other, regisNumber, vehicleUuid) VALUES (:photo, :model, :color, :vtype, :engineNo, :trans, :axle, :paint, :trim, :chasis, :converted, :drivenBy, :other, :regisNumber, :vehicleUuid)";
+            $add = "INSERT INTO vehicles(photo, model, color, vtype, engineNo, trans, axle, paint, trim, chasis, converted, drivenBy, other, regisNumber, dateAdded, vehicleUuid) VALUES (:photo, :model, :color, :vtype, :engineNo, :trans, :axle, :paint, :trim, :chasis, :converted, :drivenBy, :other, :regisNumber, :dateAdded, :vehicleUuid)";
             $stmt = parent::$pdo->prepare($add);
             $stmt->execute([
                ':photo' => self::$photo, 
@@ -79,6 +79,7 @@
                ':drivenBy' => $driverUuid['driverUuid'] ?? strtolower(self::$drivenBy), 
                ':other' => self::$other, 
                ':regisNumber' => self::$regisNumber, 
+               ':dateAdded' => date('Y-m-d'),
                ':vehicleUuid' => $vehicleUuid
             ]);
 

@@ -38,10 +38,11 @@
                 $saleUuid = $newUuid;
             }
 
-            $add = "INSERT INTO sales(amount, driver, recordedBy, salesUuid) VALUES (:amount, :driver, :recorder, :uuid)";
+            $add = "INSERT INTO sales(amount, salaryDate, driver, recordedBy, salesUuid) VALUES (:amount, :salaryDate, :driver, :recorder, :uuid)";
             $addStmt = self::$pdo->prepare($add);
             $addStmt->execute([
                 ':amount' => self::$amount,
+                ':salaryDate' => date('Y-m-d'),
                 ':driver' => self::$driver,
                 ':recorder' => $_SESSION['userUuid'],
                 ':uuid' => $saleUuid

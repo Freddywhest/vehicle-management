@@ -6,14 +6,19 @@
 
         public static string|int $amount;
         public static string $purpose;
+        public static string $workshopN;
+        public static string $workshopC;
 
         public static function addWorkshop(){
             (new self)->__construct();
-            $add = "INSERT INTO workshop (amount, purpose) VALUES (:amount, :purpose)";
+            $add = "INSERT INTO workshop (amount, purpose, workshopN, workshopC, expenseDate) VALUES (:amount, :purpose, :workshopN, workshopC, :expenseDate)";
             $addStmt = self::$pdo->prepare($add);
             $addStmt->execute([
                 ':amount' => self::$amount,
-                ':purpose' => self::$purpose
+                ':purpose' => self::$purpose,
+                ':workshopN' => self::$workshopN,
+                ':workshopC' => self::$workshopC,
+                ':expenseDate' => date('Y-m-d')
             ]);
 
             echo json_encode([

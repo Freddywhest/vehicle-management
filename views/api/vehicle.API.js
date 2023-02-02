@@ -62,8 +62,8 @@ if(new URL(document.location.href).pathname === '/vehicles'){
         formData.append('color', color.value);
         formData.append('chasis', chasis.value);
         formData.append('converted', converted ? converted.value : 'unconverted');
-        formData.append('drivenBy', drivenBy.value);
-        formData.append('other', other.value);
+        formData.append('drivenBy', drivenBy.value ? drivenBy.value : 'no driver' );
+        formData.append('other', other.value ? other.value : '-');
         formData.append('method', 'POST');
 
         const response = await APIPostRequest('/api/vehicles', formData);
@@ -461,8 +461,8 @@ if(new URL(document.location.href).pathname === '/vehicles'){
         formData.append('color', color.value);
         formData.append('chasis', chasis.value);
         formData.append('converted', converted ? converted.value : 'unconverted');
-        formData.append('drivenBy', drivenBy.value);
-        formData.append('other', other.value);
+        formData.append('drivenBy', drivenBy.value ? drivenBy.value : 'no driver' );
+        formData.append('other', other.value ? other.value : '-');
         formData.append('method', 'UPDATE');
 
         const response = await APIPostRequest('/api'+new URL(document.location.href).pathname, formData);

@@ -9,10 +9,11 @@
 
         public static function payDriver():void{
             (new self)->__construct();
-            $add = "INSERT INTO salary(amount, receiverId, receiver) VALUES (:amount, :receiverId, :receiver)";
+            $add = "INSERT INTO salary(amount, salaryDate, receiverId, receiver) VALUES (:amount, :salaryDate, :receiverId, :receiver)";
             $addStmt = self::$pdo->prepare($add);
             $addStmt->execute([
                 ':amount' => self::$amount,
+                ':salaryDate' => date('Y-m-d'),
                 ':receiverId' => self::$receiverId,
                 ':receiver' => 'driver'
             ]);

@@ -13,6 +13,7 @@
             $stmt = self::$pdo->prepare($deposit);
             $stmt->execute([
                 ':amount' => self::$amount,
+                ':transactionDate' => date('Y-m-d'),
                 ':transactionType' => 'deposit',
                 ':recordedBy' => self::$recordedBy
             ]);

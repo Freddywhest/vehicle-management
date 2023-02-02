@@ -153,7 +153,7 @@ declare(strict_types = 1);
                 drivenBy varchar(255) NOT NULL,
                 other text DEFAULT NULL,
                 regisNumber varchar(255) DEFAULT NULL,
-                dateAdded DATE NOT NULL,
+                dateAdded varchar(255) NOT NULL,
                 vehicleUuid varchar(255) NOT NULL,
                 PRIMARY KEY (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC";
@@ -172,7 +172,7 @@ declare(strict_types = 1);
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
                 amount varchar(255) DEFAULT NULL,
-                salesDate DATE NOT NULL,
+                salesDate varchar(255) NOT NULL,
                 driver varchar(255) NOT NULL,
                 recordedBy varchar(200) NOT NULL,
                 salesUuid varchar(255) NOT NULL,
@@ -193,7 +193,7 @@ declare(strict_types = 1);
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
                 amount varchar(255) DEFAULT NULL,
-                transactionDate DATE NOT NULL,
+                transactionDate varchar(255) NOT NULL,
                 transactionType varchar(255) NOT NULL,
                 recordedBy varchar(200) NOT NULL,
                 purpose TEXT NULL DEFAULT NULL,
@@ -214,7 +214,7 @@ declare(strict_types = 1);
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
                 amount varchar(255) DEFAULT NULL,
-                salaryDate DATE NOT NULL,
+                salaryDate varchar(255) NOT NULL,
                 receiverId varchar(255) NOT NULL,
                 receiver VARCHAR(50) NOT NULL,
                 PRIMARY KEY (id)
@@ -255,8 +255,10 @@ declare(strict_types = 1);
             ".self::$tableName." (
                 id int(11) NOT NULL AUTO_INCREMENT,
                 amount varchar(255) DEFAULT NULL,
-                expenseDate DATE NOT NULL,
+                expenseDate varchar(255) NOT NULL,
                 purpose text DEFAULT NULL,
+                workshopN varchar(255) DEFAULT NULL,
+                workshopC varchar(255) DEFAULT NULL,
                 PRIMARY KEY (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC";
             $workshopStmt = self::$pdo->prepare($workshop);

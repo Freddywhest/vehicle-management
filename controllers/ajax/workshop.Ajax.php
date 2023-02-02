@@ -10,6 +10,8 @@
                         if(!empty($_POST['amount']) && !empty($_POST['purpose'])){
                             Workshop::$amount = $_POST['amount'];
                             Workshop::$purpose = $_POST['purpose'];
+                            Workshop::$workshopN = $_POST['workshopN'];
+                            Workshop::$workshopC = $_POST['workshopC'];
                             Workshop::addWorkshop();
                         }else{
                             RequestError::error("Expense amount or purpose shouldn't be empty!");

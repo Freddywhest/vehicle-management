@@ -33,6 +33,8 @@ if(new URL(document.location.href).pathname === '/add-expense'){
     const expensesForm = document.forms.expensesForm;
     const amount = document.querySelector('[name="amount"]');
     const purpose = document.querySelector('[name="purpose"]');
+    const workshopN = document.querySelector('[name="workshopN"]');
+    const workshopC = document.querySelector('[name="workshopC"]');
 
     document.addEventListener('DOMContentLoaded', async () => {
         const response = await APIGetRequest('/api/totals?type=expenses');
@@ -50,6 +52,8 @@ if(new URL(document.location.href).pathname === '/add-expense'){
 
         formData.append('amount', amount.value);
         formData.append('purpose', purpose.value);
+        formData.append('workshopN', workshopN.value);
+        formData.append('workshopC', workshopC.value);
         formData.append('type', 'POST');
 
         const response = await APIPostRequest('/api/workshop', formData);
@@ -96,7 +100,9 @@ if(new URL(document.location.href).pathname === '/add-expense'){
     const detailDivShow = ({amount, expenseDate, purpose}) => {
         return `
             <h6>Date</h6> <p>${expenseDate}</p> <br>
-            <h6>Amount</h6> <p>${amount}</p> <br>
+            <h6>Amount</h6> <p>GH₵ ${amount}</p> <br>
+            <h6>Workshop worker's name</h6> <p>${workshopN}</p> <br>
+            <h6>Workshop worker's contact</h6> <p>${workshopC}</p> <br>
             <h6>Purpose</h6> <p>${purpose ? purpose : '-'}</p>
             
         `;
@@ -108,6 +114,7 @@ if(new URL(document.location.href).pathname === '/add-expense'){
             <tr>
                 <td><strong>${expenseDate}</strong></td>
                 <td>GH₵ ${amount}</td>
+                <td>${workshopN}</td>
                 <td>${purpose ? truncate(purpose, 20) : '-'}</td>
                 <td>
                     <button id="workshopShowBtn" data-tid=${id} class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalScrollable"><i class="bx bx-show"></i></button>
@@ -120,6 +127,7 @@ if(new URL(document.location.href).pathname === '/add-expense'){
             <tr>
                 <td><strong>${expenseDate}</strong></td>
                 <td>GH₵ ${amount}</td>
+                <td>GH₵ ${workshopN}</td>
                 <td>${purpose ? truncate(purpose, 20) : '-'}</td>
                 <td>
                     <button id="workshopShowBtn" data-tid=${id} class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalScrollable"><i class="bx bx-show"></i></button>
