@@ -9,7 +9,7 @@ const APIPostRequest = async (url, formData) => {
         method: 'POST',
         body: formData
     });
-    const response = await request.json();
+    const response = await request.text();
     return response;
 }
 
@@ -57,6 +57,7 @@ if(new URL(document.location.href).pathname === '/add-expense'){
         formData.append('type', 'POST');
 
         const response = await APIPostRequest('/api/workshop', formData);
+        console.log(response);
         if(response.message === "Redirect"){
             document.location.href = '/logout';
             return;
