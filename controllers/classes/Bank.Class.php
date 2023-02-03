@@ -9,7 +9,7 @@
 
         public static function deposit():void{
             (new self)->__construct();
-            $deposit = "INSERT INTO bank(amount, transactionType, recordedBy) VALUES(:amount, :transactionType, :recordedBy)";
+            $deposit = "INSERT INTO bank(amount, transactionDate, transactionType, recordedBy) VALUES(:amount, :transactionDate, :transactionType, :recordedBy)";
             $stmt = self::$pdo->prepare($deposit);
             $stmt->execute([
                 ':amount' => self::$amount,
@@ -26,10 +26,11 @@
 
         public static function withdraw():void{
             (new self)->__construct();
-            $deposit = "INSERT INTO bank(amount, transactionType, recordedBy, purpose) VALUES(:amount, :transactionType, :recordedBy, :purpose)";
+            $deposit = "INSERT INTO bank(amount, transactionDate, transactionType, recordedBy, purpose) VALUES(:amount, :transactionDate, :transactionType, :recordedBy, :purpose)";
             $stmt = self::$pdo->prepare($deposit);
             $stmt->execute([
                 ':amount' => self::$amount,
+                ':transactionDate' => date('Y-m-d'),
                 ':transactionType' => 'withdraw',
                 ':recordedBy' => self::$recordedBy,
                 ':purpose' => self::$purpose
