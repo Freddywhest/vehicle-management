@@ -109,7 +109,7 @@ if(new URL(document.location.href).pathname === '/add-expense'){
         `;
     }
 
-    const tableTr = ({amount, expenseDate, id, purpose}, role) => {
+    const tableTr = ({amount, expenseDate, id, purpose, workshopN}, role) => {
         if(role === 'superAdmin' || role === 'admin'){
             return`
             <tr>
