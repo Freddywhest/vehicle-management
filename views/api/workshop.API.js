@@ -9,7 +9,7 @@ const APIPostRequest = async (url, formData) => {
         method: 'POST',
         body: formData
     });
-    const response = await request.text();
+    const response = await request.json();
     return response;
 }
 
