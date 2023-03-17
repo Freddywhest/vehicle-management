@@ -35,7 +35,7 @@
         public static $accidentRecord;
         public static $traffic;
 
-        static public function guidv4($data = null):string {
+        public static function guidv4($data = null):string {
             // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
             $data = $data ?? random_bytes(16);
             assert(strlen($data) == 16);
@@ -50,7 +50,7 @@
         }
 
         
-        static public function driverId():string | array {
+        public static function driverId():string | array {
             $newDriverId = sprintf("%06d", mt_rand(1, 999999));
             $idCheck = "SELECT driverIdNo FROM drivers WHERE driverIdNo =:id";
             $idCheckStmt = self::$pdo->prepare($idCheck);
@@ -59,11 +59,10 @@
             ]);
             $idCount = $idCheckStmt->rowCount();
             if($idCount > 0){
-                $driverId = $newDriverId + 5;
+                return $newDriverId + 5;
             }else{
-                $driverId = $newDriverId;
+                return $newDriverId;
             }
-            return $driverId;
         }
 
         public static function getDrivers():void{
@@ -201,13 +200,12 @@
         public static function updateDriver():void{
             (new self)->__construct();
 
-            $addDriver = "UPDATE drivers SET driverPhoto =:photo, driverFullName =:fullName, bateOfBirth =:bateOfBirth, driverIdNo =:driverIdNo, phoneHome =:phoneHome, phoneMobile =:phoneMobile, idNumber =:idNumber, email =:email, curAddress =:curAddress, prevAddress =:prevAddress, prevCity =:prevCity, prevRegion =:prevRegion, emergence =:emergence, position =:position, salary =:salary, workedInCompany =:workedInCompany, preventedLawful =:preventedLawful, convictedFelony =:convictedFelony, drivingLicense =:drivingLicense, highestEdu =:highestEdu, fullKnowledge =:fullKnowledge, expTractor =:expTractor, expTruck =:expTruck, expTrailer =:expTrailer, expBus =:expBus, expVan =:expVan, expTaxi =:expTaxi, accidentRecord =:accidentRecord, traffic =:traffic WHERE driverUuid =:driverUuid";
+            $addDriver = "UPDATE drivers SET driverPhoto =:photo, driverFullName =:fullName, bateOfBirth =:bateOfBirth, phoneHome =:phoneHome, phoneMobile =:phoneMobile, idNumber =:idNumber, email =:email, curAddress =:curAddress, prevAddress =:prevAddress, prevCity =:prevCity, prevRegion =:prevRegion, emergence =:emergence, position =:position, salary =:salary, workedInCompany =:workedInCompany, preventedLawful =:preventedLawful, convictedFelony =:convictedFelony, drivingLicense =:drivingLicense, highestEdu =:highestEdu, fullKnowledge =:fullKnowledge, expTractor =:expTractor, expTruck =:expTruck, expTrailer =:expTrailer, expBus =:expBus, expVan =:expVan, expTaxi =:expTaxi, accidentRecord =:accidentRecord, traffic =:traffic WHERE driverUuid =:driverUuid";
             $addDriverStmt = self::$pdo->prepare($addDriver);
             $addDriverStmt->execute([
                 ':photo' => self::$photo, 
                 ':fullName' => self::$fullName, 
-                ':bateOfBirth' => self::$bateOfBirth, 
-                ':driverIdNo' => self::$driverIdNo, 
+                ':bateOfBirth' => self::$bateOfBirth,
                 ':phoneHome' => self::$phoneHome, 
                 ':phoneMobile' => self::$phoneMobile, 
                 ':idNumber' => self::$idNumber, 
