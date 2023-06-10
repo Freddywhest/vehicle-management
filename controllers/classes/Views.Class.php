@@ -1,6 +1,7 @@
 <?php 
     class Views{
         public function Home(){
+            $getMonthsAndYears = array_unique(Sales::getMonthsAndYears());
             include $_SERVER['DOCUMENT_ROOT'].'/views/index.phtml';
         }
 
@@ -17,6 +18,7 @@
         }
 
         public function Sales(){
+            $getMonthsAndYears = array_unique(Sales::getMonthsAndYears());
             include $_SERVER['DOCUMENT_ROOT'].'/views/Sales/sales.phtml';
         }
 

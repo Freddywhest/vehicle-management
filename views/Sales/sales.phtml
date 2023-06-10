@@ -16,8 +16,27 @@
               <!-- Button trigger modal -->
               <div>
                 <select id="smallSelect" class="form-select form-select-sm">
-                  <option value="all" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'all'? 'selected' : 'selected'; ?> >All Sales</option>
+                  <option value="all" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'all'? 'selected' : ''; ?> >All Sales</option>
                   <option value="today" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'selected' : ''; ?>>Today's Sales</option>
+                  <?php
+                      $months = array(
+                        'January',
+                        'February',
+                        'March',
+                        'April',
+                        'May',
+                        'June',
+                        'July ',
+                        'August',
+                        'September',
+                        'October',
+                        'November',
+                        'December',
+                      );
+                      foreach($getMonthsAndYears as $getMonthsAndYear){ ?>
+                        <option value="<?php echo $getMonthsAndYear ?>" <?php echo isset($_GET['filter']) && $_GET['filter'] === $getMonthsAndYear? 'selected' : ''; ?> ><?php echo $months[(int) explode('-', $getMonthsAndYear)[1]-1] .', '.explode('-', $getMonthsAndYear)[0] ?></option>
+                      <?php } ?>
+                  ?>
                 </select>
               </div>
             </div>

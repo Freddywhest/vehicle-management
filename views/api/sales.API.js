@@ -38,7 +38,7 @@ if(document.forms.validateDriverFrom) {
             idNo.innerText = `[${driverIdNo}]`;
             dName.innerText = `[${driverFullName}]`;
             dUuid.value = driverUuid;
-            uploadedAvatar.src = driverPhoto ? `/uploads/users/${driverPhoto}` : '/uploads/users/avatar.png';
+            uploadedAvatar.src = driverPhoto ? `/uploads/drivers/${driverPhoto}` : '/uploads/users/avatar.png';
         },
         reset : () => {
             idNo.innerText = '';
@@ -127,6 +127,8 @@ if(document.forms.validateDriverFrom) {
 /* ------------------------------------------------------------------------------------------------------------------ */
 }else if(document.querySelector('#ssllaal')){
     let salesDeleteBtns;
+    const d = new Date();
+    const month = d.getFullYear()+'-'+'0'+(d.getMonth()+1);
     const tBody = document.querySelector('.table-border-bottom-0');
     const filterSelect = document.querySelector('#smallSelect');
     const pageNumbers = document.querySelector('.pagination');
@@ -167,7 +169,7 @@ if(document.forms.validateDriverFrom) {
 
     const APIGetData = async (page, filter) => {
         tBody.innerHTML = '';
-        const newFilter = filter ? filter : 'all';
+        const newFilter = filter ? filter : month;
         const request = await fetch('/api/sales?page='+page+'&&filter='+newFilter);
         const response = await request.json();
         if(response.message && response.message == "Redirect"){
@@ -229,7 +231,7 @@ if(document.forms.validateDriverFrom) {
         }else{
             const params = new URLSearchParams(window.location.search);
             const page = params.get('page') ? parseInt(params.get('page')) : 1;
-            const filter = params.get('filter') ? params.get('filter') : 'all';
+            const filter = params.get('filter') ? params.get('filter') : month;
             deleteErr.innerText = response.message;
             deleteErr.style.color = 'green';
             await APIGetData(page, filter);
@@ -245,7 +247,7 @@ if(document.forms.validateDriverFrom) {
     window.addEventListener('popstate', async function () {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') ? parseInt(params.get('page')) : 1;
-        const filter = params.get('filter') ? params.get('filter') : 'all';
+        const filter = params.get('filter') ? params.get('filter') : month;
         await APIGetData(page, filter);
     });
     
@@ -254,7 +256,7 @@ if(document.forms.validateDriverFrom) {
         const pageNums = document.querySelectorAll('#pageNums');
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') ? parseInt(params.get('page')) : 1;
-        const filter = params.get('filter') ? params.get('filter') : 'all';
+        const filter = params.get('filter') ? params.get('filter') : month;
         if(document.querySelectorAll('#salesDeleteBtn')){
             salesDeleteBtns = document.querySelectorAll('#salesDeleteBtn');
             salesDeleteBtns.forEach((salesDeleteBtn) => {
@@ -319,7 +321,7 @@ if(document.forms.validateDriverFrom) {
     document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') ? parseInt(params.get('page')) : 1;
-        const filter = params.get('filter') ? params.get('filter') : 'all';
+        const filter = params.get('filter') ? params.get('filter') : month;
         await APIGetData(page, filter);
         if(document.querySelectorAll('#salesDeleteBtn')){
             salesDeleteBtns = document.querySelectorAll('#salesDeleteBtn');

@@ -10,7 +10,7 @@
                     Sales::$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     Sales::getSalesByDriver($params[0]);
                 }else{
-                    Sales::$filter = isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'today' : 'all';
+                    Sales::$filter = isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'today' : ($_GET['filter'] === 'all' ? 'all' : $_GET['filter']) ;
                     header('Content-Type: application/json; charset=utf-8');
                     Sales::$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
                     if($_SESSION['userRole'] === 'superAdmin' || $_SESSION['userRole'] === 'admin'){

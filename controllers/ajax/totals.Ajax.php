@@ -6,12 +6,19 @@
         CheckUser::checkUserAvailable();
             if(CheckUser::$userAvailable === true){
                 if($_SERVER['REQUEST_METHOD'] === 'GET'){
-                    if(isset($_GET['type']) && $_GET['type'] === 'bank'){
-                        RequestError::singleArray(Totals::bankBalance());
-                    }else if(isset($_GET['type']) && $_GET['type'] === 'all'){
-                        RequestError::singleArray(Totals::allTotals());
-                    }else if(isset($_GET['type']) && $_GET['type'] === 'expenses'){
-                        RequestError::singleArray(Totals::totalExpenses());
+                    if(isset($_GET['filter'])){
+                        Totals::$filter = $_GET['filter'];
+                        RequestError::singleArray(Totals::totalSalesFilter());
+                        return;
+                    }else{
+                        if(isset($_GET['type']) && $_GET['type'] === 'bank'){
+                            RequestError::singleArray(Totals::bankBalance());
+                        }else if(isset($_GET['type']) && $_GET['type'] === 'all'){
+                            RequestError::singleArray(Totals::allTotals());
+                        }else if(isset($_GET['type']) && $_GET['type'] === 'expenses'){
+                            RequestError::singleArray(Totals::totalExpenses());
+                            
+                        }
                         
                     }
                 }

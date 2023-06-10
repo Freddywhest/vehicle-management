@@ -2,7 +2,8 @@
     class Sales extends DataBase{
         public static int|string $currentPage;
         public static int|string $salesId;
-        public static string $filter = 'all';
+        public static string $filter;
+        public static string $filterYear;
 
         public static int|string $amount;
         public static string $driver;
@@ -62,7 +63,9 @@
                 }elseif(self::$filter === 'today'){
                     $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE()";
                 }else{
-                    $total = "SELECT salesUuid FROM sales";
+                    $getMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
+                    $total = "SELECT salesUuid FROM sales WHERE DATE_FORMAT(salesDate, '%Y-%m') ='".$getMonth."'";
+                    /* var_dump($getMonth); */
                 }
                 $totalStmt = self::$pdo->prepare($total);
                 $totalStmt->execute();
@@ -72,7 +75,8 @@
                 }elseif(self::$filter === 'today'){
                     $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE() AND recordedBy =:recordedBy";
                 }else{
-                    $total = "SELECT salesUuid FROM sales AND recordedBy =:recordedBy";
+                    $getMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
+                    $total = "SELECT salesUuid FROM sales WHERE recordedBy =:recordedBy AND DATE_FORMAT(salesDate, '%Y-%m') ='".$getMonth."'";
                 }
                 $totalStmt = self::$pdo->prepare($total);
                 $totalStmt->execute([
@@ -93,7 +97,8 @@
                 }elseif(self::$filter === 'today'){
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() ORDER BY sales.id DESC LIMIT :s, :t";
                 }else{
-                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                    $getQMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE DATE_FORMAT(sales.salesDate, '%Y-%m') ='".$getQMonth."' ORDER BY sales.id DESC LIMIT :s, :t";
                 }
                 $salesStmt = self::$pdo->prepare($sales);
                 $salesStmt->execute([
@@ -106,7 +111,8 @@
                 }elseif(self::$filter === 'today'){
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() AND sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
                 }else{
-                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                    $getQMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy AND DATE_FORMAT(sales.salesDate, '%Y-%m') ='".$getQMonth."' ORDER BY sales.id DESC LIMIT :s, :t";
                 }
                 $salesStmt = self::$pdo->prepare($sales);
                 $salesStmt->execute([
@@ -320,5 +326,16 @@
                     "message" => "Driver with Driver's Identity Number: [".self::$driver."] is found!"
                 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             }
+        }
+
+        public static function getMonthsAndYears() 
+        {
+            (new self)->__construct();
+            $months = "SELECT DATE_FORMAT(salesDate, '%Y-%m') AS saleMonth FROM sales ORDER BY DATE_FORMAT(salesDate, '%Y-%m') DESC";
+            $mStmt = self::$pdo->prepare($months);
+            $mStmt->execute();
+
+            $getmonths = $mStmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_column($getmonths, 'saleMonth');
         }
     }

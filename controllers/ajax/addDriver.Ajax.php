@@ -42,7 +42,7 @@
 
                 Driver::$traffic = isset($_POST['dateViolation'], $_POST['violation'], $_POST['state'], $_POST['penalty']) && !empty($_POST['dateViolation']) && !empty($_POST['state']) && !empty($_POST['violation']) && !empty($_POST['penalty'])  ? $_POST['dateViolation'].'|'.$_POST['violation'].'|'.$_POST['state'].'|'.$_POST['penalty'] : NULL;
                 
-                $driverPhoto = isset($_FILES['workerPhoto']['name']) ? $_FILES['workerPhoto']['name'] : NULL;
+                $driverPhoto = isset($_FILES['driverPhoto']['name']) ? $_FILES['driverPhoto']['name'] : NULL;
 
                 if(!empty(Driver::$fullName) && !empty(Driver::$phoneHome) && !empty(Driver::$bateOfBirth) && !empty(Driver::$idNumber)){
                     if($driverPhoto !== NULL){

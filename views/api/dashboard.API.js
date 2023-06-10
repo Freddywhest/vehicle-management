@@ -8,9 +8,9 @@ const totalD = document.getElementById('totalD');
 const totalV = document.getElementById('totalV');
 const totalW = document.getElementById('totalW');
 const totalAd = document.getElementById('totalAd');
+const salesTotalFiter = document.getElementById('smallSelect');
 
 const loadDatas = (data) => {
-    totalS.innerHTML = 'GH₵ '+data.sales.totalSales;
     totalST.innerHTML = 'GH₵ '+data.sales.totalToday;
     totalBD.innerHTML = 'GH₵ '+data.bank.totalDeposit;
     totalBW.innerHTML = 'GH₵ '+data.bank.totalWithdraw;
@@ -32,8 +32,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if(response.status){
-        setTimeout(() => {
+        setTimeout(async() => {
             loadDatas(response.data);
+            await loadFilteredSales();
         }, 1500);
     }
 })
+
+salesTotalFiter.addEventListener('change',async  (e) => {
+    e.preventDefault();
+    totalS.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i>`
+    setTimeout(async() => {
+        await loadFilteredSales();
+    }, 1500);
+    
+});
+
+const loadFilteredSales = async () => {
+    const request = await fetch('/api/totals?type=sales&&filter='+salesTotalFiter.value);
+    const response = await request.json();
+    console.log(response);
+    if(response.message && response.message === 'Redirect'){
+        document.location.href = '/logout';
+        return;
+    }
+
+    if(response.status){
+        totalS.innerHTML = `GH₵ ${response.data.totalSalesFilter}`;
+    }
+}

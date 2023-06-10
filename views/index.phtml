@@ -30,9 +30,33 @@
             <div class="card-title d-flex align-items-start justify-content-between">
               <div class="avatar flex-shrink-0">
                 <img src="/views/assets/img/icons/unicons/sales.png" alt="chart success" class="rounded">
-              </div>
+                </div>
+                
+                <div class="">
+                <select id="smallSelect" class="form-select form-select-sm">
+                <?php
+                    $months = array(
+                      'January',
+                      'February',
+                      'March',
+                      'April',
+                      'May',
+                      'June',
+                      'July ',
+                      'August',
+                      'September',
+                      'October',
+                      'November',
+                      'December',
+                    );
+                    foreach($getMonthsAndYears as $getMonthsAndYear){ ?>
+                      <option value="<?php echo $getMonthsAndYear ?>" <?php echo isset($getMonthsAndYear) && $getMonthsAndYear === date('Y').'-'.date('m') ? 'selected' : ''; ?> ><?php echo $months[(int) explode('-', $getMonthsAndYear)[1]-1] .', '.explode('-', $getMonthsAndYear)[0] ?></option>
+                    <?php } ?>
+                ?>
+              </select>
+                </div>
             </div>
-            <span class="fw-semibold d-block mb-1">Total Sales</span>
+            <span class="fw-semibold d-block mb-1">Total Monthly Sales</span>
             <h3 class="card-title mb-2" id="totalS"><i class='bx bx-loader-alt bx-spin'></i></h3>
           </div>
         </div>
