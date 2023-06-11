@@ -125,7 +125,7 @@ if(document.forms.validateDriverFrom) {
         }
     })
 /* ------------------------------------------------------------------------------------------------------------------ */
-}else if(document.querySelector('#ssllaal')){
+}else if(document.querySelector('#allSalesPage')){
     let salesDeleteBtns;
     const d = new Date();
     const month = d.getFullYear()+'-'+'0'+(d.getMonth()+1);
@@ -133,6 +133,10 @@ if(document.forms.validateDriverFrom) {
     const filterSelect = document.querySelector('#smallSelect');
     const pageNumbers = document.querySelector('.pagination');
     const deleteErr =document.getElementById('deleteErr');
+    const filterDateSelector = document.querySelector('#filterDateSelector');
+    async function filterWithDate(params, value){
+        await APIGetData(1, '', true, value);
+    }
     const tableTr = ({amount, salesDate, driverFullName, fullName, salesUuid}, role) => {
         if(role === 'superAdmin' || role === 'admin'){
             return`
@@ -167,10 +171,15 @@ if(document.forms.validateDriverFrom) {
         </li>
     `);
 
-    const APIGetData = async (page, filter) => {
+    const APIGetData = async (page, filter, filterDate = false, filterDateValue) => {
         tBody.innerHTML = '';
+        let request;
         const newFilter = filter ? filter : month;
-        const request = await fetch('/api/sales?page='+page+'&&filter='+newFilter);
+        if(filterDate && filterDateValue){
+            request = await fetch('/api/sales?page='+page+'&&filterDate='+filterDateValue);
+        }else{
+            request = await fetch('/api/sales?page='+page+'&&filter='+newFilter);
+        }
         const response = await request.json();
         if(response.message && response.message == "Redirect"){
             document.location.href = "/logout"
@@ -234,21 +243,31 @@ if(document.forms.validateDriverFrom) {
             const filter = params.get('filter') ? params.get('filter') : month;
             deleteErr.innerText = response.message;
             deleteErr.style.color = 'green';
-            await APIGetData(page, filter);
+            if(params.get('filterDate')){
+                await APIGetData(page, '', true, params.get('filterDate'));
+            }else{
+                await APIGetData(page, filter, false, '');
+            }
         }
     }
 
-    function setQueryStringParameter(name, value) {
+    function setQueryStringParameter(name, value, deleteFilterDate = false, deleteFilter = false) {
         const params = new URLSearchParams(window.location.search);
         params.set(name, value);
-        window.history.pushState({}, "", decodeURIComponent(`${window.location.pathname}?${params}`));
+        params.get('filterDate') && deleteFilterDate ? params.delete('filterDate') : '';
+        params.get('filter') && deleteFilter ? params.delete('filter') : '';
+        window.history.pushState({}, document.title, decodeURIComponent(`${window.location.pathname}?${params}`));
     }
 
     window.addEventListener('popstate', async function () {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') ? parseInt(params.get('page')) : 1;
         const filter = params.get('filter') ? params.get('filter') : month;
-        await APIGetData(page, filter);
+        if(params.get('filterDate')){
+            await APIGetData(page, '', true, params.get('filterDate'));
+        }else{
+            await APIGetData(page, filter, false, '');
+        }
     });
     
 
@@ -279,8 +298,18 @@ if(document.forms.validateDriverFrom) {
                     e.stopPropagation();
                     e.preventDefault();
                     e.stopImmediatePropagation();
-                    await APIGetData(parseInt(pageNum.getAttribute('page-number')), filter);
-                    setQueryStringParameter('page', parseInt(pageNum.getAttribute('page-number')));
+                    let filterDateBool;
+                    let filterBool;
+                    if(params.get('filterDate')){
+                        await APIGetData(parseInt(pageNum.getAttribute('page-number')), '', true, params.get('filterDate'));
+                        filterDateBool = false;
+                        filterBool = true;
+                    }else{
+                        await APIGetData(parseInt(pageNum.getAttribute('page-number')), filter, false, '');
+                        filterDateBool = true;
+                        filterBool = false;
+                    }
+                    setQueryStringParameter('page', parseInt(pageNum.getAttribute('page-number')), filterDateBool, filterBool);
                 }, false)
             });
 
@@ -291,12 +320,22 @@ if(document.forms.validateDriverFrom) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.stopImmediatePropagation();
+                let filterDateBool;
+                let filterBool;
                 if(document.querySelector('.prev').classList.contains('disabled')){
                     return;
                 }
                 document.querySelector('.prev').classList.add('disabled');
-                await APIGetData(page - 1, filter)
-                setQueryStringParameter('page', page - 1)
+                if(params.get('filterDate')){
+                    await APIGetData(page - 1, '', true, params.get('filterDate'));
+                    filterDateBool = false;
+                    filterBool = true;
+                }else{
+                    await APIGetData(page - 1, filter, false, '');
+                    filterDateBool = true;
+                    filterBool = false;
+                }
+                setQueryStringParameter('page', page - 1, filterDateBool, filterBool)
                 document.querySelector('.prev').classList.remove('disabled');
             });
         }
@@ -306,12 +345,22 @@ if(document.forms.validateDriverFrom) {
                 e.stopPropagation();
                 e.preventDefault();
                 e.stopImmediatePropagation();
+                let filterDateBool;
+                let filterBool;
                 if(document.querySelector('.next').classList.contains('disabled')){
                     return;
                 }
                 document.querySelector('.next').classList.add('disabled');
-                await APIGetData(page + 1, filter)
-                setQueryStringParameter('page', page+1)
+                if(params.get('filterDate')){
+                    await APIGetData(page + 1, '', true, params.get('filterDate'));
+                    filterDateBool = false;
+                    filterBool = true;
+                }else{
+                    await APIGetData(page + 1, filter, false, '');
+                    filterDateBool = true;
+                    filterBool = false;
+                }
+                setQueryStringParameter('page', page+1, filterDateBool, filterBool)
                 document.querySelector('.next').classList.remove('disabled');
             });
         }
@@ -322,7 +371,11 @@ if(document.forms.validateDriverFrom) {
         const params = new URLSearchParams(window.location.search);
         const page = params.get('page') ? parseInt(params.get('page')) : 1;
         const filter = params.get('filter') ? params.get('filter') : month;
-        await APIGetData(page, filter);
+        if(params.get('filterDate')){
+            await APIGetData(page, '', true, params.get('filterDate'));
+        }else{
+            await APIGetData(page, filter, false, '');
+        }
         if(document.querySelectorAll('#salesDeleteBtn')){
             salesDeleteBtns = document.querySelectorAll('#salesDeleteBtn');
             salesDeleteBtns.forEach((salesDeleteBtn) => {
@@ -342,13 +395,26 @@ if(document.forms.validateDriverFrom) {
 
     filterSelect.addEventListener('change', (e) => {
         e.preventDefault();
+        const params = new URLSearchParams(window.location.search);
         const page = 1;
         const filter = filterSelect.value;
-        setQueryStringParameter('filter', filter)
-        setQueryStringParameter('page', page)
-        APIGetData(page, filter);
+        setQueryStringParameter('filter', filter, true, false)
+        setQueryStringParameter('page', page, true, false)
+        if(params.get('filterDate')){
+            params.delete('filterDate')
+        }
+        APIGetData(page, filter, false, '');
     })
-}else if(document.querySelector('#addsaa')){
+
+    filterDateSelector.addEventListener('change', async function (e) {
+        e.preventDefault();
+        const params = new URLSearchParams(window.location.search);
+        const page = 1;
+        setQueryStringParameter('filterDate', this.value, false, true)
+        setQueryStringParameter('page', page, false, true)
+        await filterWithDate(params, this.value);
+    })
+}else if(document.querySelector('#driverSalesPage')){
     let salesDeleteBtns;
     const tBody = document.querySelector('.table-border-bottom-0');
     const filterSelect = document.querySelector('#smallSelect');
@@ -462,7 +528,7 @@ if(document.forms.validateDriverFrom) {
     function setQueryStringParameter(name, value) {
         const params = new URLSearchParams(window.location.search);
         params.set(name, value);
-        window.history.pushState({}, "", decodeURIComponent(`${window.location.pathname}?${params}`));
+        window.history.pushState({}, document.title, decodeURIComponent(`${window.location.pathname}?${params}`));
     }
 
     window.addEventListener('popstate', async function () {

@@ -9,6 +9,7 @@ const totalV = document.getElementById('totalV');
 const totalW = document.getElementById('totalW');
 const totalAd = document.getElementById('totalAd');
 const salesTotalFiter = document.getElementById('smallSelect');
+const filterDateSelector = document.getElementById('filterDateSelector');
 
 const loadDatas = (data) => {
     totalST.innerHTML = 'GH₵ '+data.sales.totalToday;
@@ -48,10 +49,18 @@ salesTotalFiter.addEventListener('change',async  (e) => {
     
 });
 
+filterDateSelector.addEventListener('change',async  (e) => {
+    e.preventDefault();
+    totalST.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i>`
+    setTimeout(async() => {
+        await loadDailyFilteredSales();
+    }, 1500);
+    
+});
+
 const loadFilteredSales = async () => {
     const request = await fetch('/api/totals?type=sales&&filter='+salesTotalFiter.value);
     const response = await request.json();
-    console.log(response);
     if(response.message && response.message === 'Redirect'){
         document.location.href = '/logout';
         return;
@@ -59,5 +68,18 @@ const loadFilteredSales = async () => {
 
     if(response.status){
         totalS.innerHTML = `GH₵ ${response.data.totalSalesFilter}`;
+    }
+}
+
+const loadDailyFilteredSales = async () => {
+    const request = await fetch('/api/totals?type=sales&&filterDate='+filterDateSelector.value);
+    const response = await request.json();
+    if(response.message && response.message === 'Redirect'){
+        document.location.href = '/logout';
+        return;
+    }
+
+    if(response.status){
+        totalST.innerHTML = `GH₵ ${response.data.totalDailySalesFilter}`;
     }
 }

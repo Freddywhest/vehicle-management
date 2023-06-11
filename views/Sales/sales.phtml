@@ -5,7 +5,7 @@
           <div class="container-xxl flex-grow-1 container-p-y">
             
                   
-          <h4 class="fw-bold py-3 mb-4" id="ssllaal">
+          <h4 class="fw-bold py-3 mb-4" id="allSalesPage">
             <span class="text-muted fw-light">Sales/</span> Sales
           </h4>
 
@@ -15,29 +15,35 @@
               <h5 class="card-header">All Sales</h5>
               <!-- Button trigger modal -->
               <div>
+                <?php 
+                $months = array(
+                  'January',
+                  'February',
+                  'March',
+                  'April',
+                  'May',
+                  'June',
+                  'July ',
+                  'August',
+                  'September',
+                  'October',
+                  'November',
+                  'December',
+                );
+                ?>
                 <select id="smallSelect" class="form-select form-select-sm">
+                  <option value="<?php echo date('Y-m') ?>"><?php echo isset($_GET['filterDate']) ? 'Filter Sales By Months' : $months[(int) explode('-', date('Y-m'))[1]-1] .', '.explode('-', date('Y-m'))[0] ?></option>
                   <option value="all" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'all'? 'selected' : ''; ?> >All Sales</option>
                   <option value="today" <?php echo isset($_GET['filter']) && $_GET['filter'] === 'today' ? 'selected' : ''; ?>>Today's Sales</option>
                   <?php
-                      $months = array(
-                        'January',
-                        'February',
-                        'March',
-                        'April',
-                        'May',
-                        'June',
-                        'July ',
-                        'August',
-                        'September',
-                        'October',
-                        'November',
-                        'December',
-                      );
                       foreach($getMonthsAndYears as $getMonthsAndYear){ ?>
-                        <option value="<?php echo $getMonthsAndYear ?>" <?php echo isset($_GET['filter']) && $_GET['filter'] === $getMonthsAndYear? 'selected' : ''; ?> ><?php echo $months[(int) explode('-', $getMonthsAndYear)[1]-1] .', '.explode('-', $getMonthsAndYear)[0] ?></option>
+                        <option value="<?php echo $getMonthsAndYear ?>" <?php echo isset($_GET['filter']) && $_GET['filter'] === $getMonthsAndYear ? 'selected' : ''; ?> ><?php echo $months[(int) explode('-', $getMonthsAndYear)[1]-1] .', '.explode('-', $getMonthsAndYear)[0] ?></option>
                       <?php } ?>
                   ?>
                 </select>
+              </div>
+              <div>
+                  <input type="text" id="filterDateSelector" <?php echo isset($_GET['filterDate']) ? "value='{$_GET['filterDate']}'" : "" ?> placeholder="Filter sales by date" class="form-control">
               </div>
             </div>
             <span class="ms-3" id="deleteErr"></span>
@@ -79,7 +85,7 @@
           <hr class="my-5">
                     
       </div>
-<script src="/views/api/sales.API.js"></script>
+      <script src="/views/api/sales.API.js?v=1"></script>
 <!-- / Content -->
 
 
@@ -87,17 +93,17 @@
   <?php include  $_SERVER['DOCUMENT_ROOT'].'/views/components/footer.phtml'; ?>
 <!-- / Footer -->
 
-          
-      <div class="content-backdrop fade"></div>
-    </div>
-    <!-- Content wrapper -->
+
+<div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
   </div>
   <!-- / Layout page -->
 </div>
 
-    
-    
-    <!-- Overlay -->
+
+
+<!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
     
     
@@ -106,6 +112,17 @@
   
   <!-- Core JS -->
   <!-- build:js assets/vendor/js/core.js -->
+  <script src="/views/assets/js/datepicker.js"></script>
+  <script>
+  const allDates = <?php echo $getSalesDates ?>;
+    flatpickr("#filterDateSelector", {
+      altInput: true,
+      altFormat: 'F j, Y',
+      dateFormat: 'Y-m-d',
+      maxDate: 'today',
+      enable: allDates
+    });
+  </script>
   <script src="/views/assets/vendor/libs/jquery/jquery.js"></script>
   <script src="/views/assets/vendor/libs/popper/popper.js"></script>
   <script src="/views/assets/vendor/js/bootstrap.js"></script>
@@ -127,5 +144,4 @@
 </body>
 
 
-<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/tables-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:09:32 GMT -->
 </html>

@@ -94,7 +94,7 @@
             $totalStmt->execute();
             $totalVehicles = $totalStmt->rowCount();
 
-            $perPage = 5;
+            $perPage = 15;
             $totalPages = ceil($totalVehicles/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
             $vehicles = "SELECT vehicles.model, vehicles.color, vehicles.vtype, vehicles.converted, vehicles.regisNumber, drivers.driverFullName, vehicles.engineNo, vehicles.vehicleUuid FROM vehicles LEFT JOIN drivers ON drivers.driverUuid = vehicles.drivenBy ORDER BY vehicles.id DESC LIMIT :s, :t";

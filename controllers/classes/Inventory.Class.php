@@ -84,7 +84,7 @@
             $totalStmt->execute();
             $total = $totalStmt->rowCount();
 
-            $perPage = 10;
+            $perPage = 15;
             $totalPages = ceil($total/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -123,7 +123,7 @@
             ]);
             $total = $totalStmt->rowCount();
 
-            $perPage = 1;
+            $perPage = 15;
             $totalPages = ceil($total/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 

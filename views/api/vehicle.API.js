@@ -466,7 +466,6 @@ if(new URL(document.location.href).pathname === '/vehicles'){
         formData.append('method', 'UPDATE');
 
         const response = await APIPostRequest('/api'+new URL(document.location.href).pathname, formData);
-        console.log(response);
         if(response.message === 'Redirect'){
             document.location.href = '/logout';
             return

@@ -132,7 +132,7 @@
             $totalStmt->execute();
             $totalWorkers = $totalStmt->rowCount();
 
-            $perPage = 10;
+            $perPage = 15;
             $totalPages = ceil($totalWorkers/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 

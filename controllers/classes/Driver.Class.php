@@ -72,7 +72,7 @@
             $totalStmt->execute();
             $totalDrivers = $totalStmt->rowCount();
 
-            $perPage = 2;
+            $perPage = 15;
             $totalPages = ceil($totalDrivers/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -103,7 +103,7 @@
             ]);
             $totalDrivers = $totalStmt->rowCount();
 
-            $perPage = 2;
+            $perPage = 15;
             $totalPages = ceil($totalDrivers/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 

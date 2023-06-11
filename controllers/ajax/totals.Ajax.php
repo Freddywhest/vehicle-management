@@ -10,6 +10,9 @@
                         Totals::$filter = $_GET['filter'];
                         RequestError::singleArray(Totals::totalSalesFilter());
                         return;
+                    }elseif(isset($_GET['filterDate'])){
+                        Totals::$filterDate = $_GET['filterDate'];
+                        RequestError::singleArray(Totals::totalDailtySalesFilter());
                     }else{
                         if(isset($_GET['type']) && $_GET['type'] === 'bank'){
                             RequestError::singleArray(Totals::bankBalance());

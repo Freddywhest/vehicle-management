@@ -328,7 +328,6 @@ if(new URL(document.location.href).pathname === '/add-inventory'){
                     formData.append('inventoryId', inventoryId);
                     formData.append('method', 'GET');
                     const response = await APIGet('/api/inventory', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -384,7 +383,6 @@ if(new URL(document.location.href).pathname === '/add-inventory'){
                     formData.append('inventoryId', inventoryId);
                     formData.append('method', 'GET');
                     const response = await APIGet('/api/inventory', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -392,7 +390,6 @@ if(new URL(document.location.href).pathname === '/add-inventory'){
 
                     if(response.status){
                         setTimeout(() => {
-                            console.log(response.data);
                             detailsBody.innerHTML = detailDivShow(response.data);
                         }, 1500);
                     }
@@ -447,7 +444,6 @@ if(new URL(document.location.href).pathname === '/add-inventory'){
                     formData.append('inventoryId', inventoryId);
                     formData.append('method', 'QUANTITY');
                     const response = await APIGet('/api/inventory', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -488,7 +484,6 @@ if(new URL(document.location.href).pathname === '/add-inventory'){
                     formData.append('inventoryId', inventoryId);
                     formData.append('method', 'QUANTITY');
                     const response = await APIGet('/api/inventory', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;

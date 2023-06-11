@@ -2,7 +2,8 @@
     class Sales extends DataBase{
         public static int|string $currentPage;
         public static int|string $salesId;
-        public static string $filter;
+        public static string|bool $filter;
+        public static string|bool $filterDate;
         public static string $filterYear;
 
         public static int|string $amount;
@@ -62,6 +63,8 @@
                     $total = "SELECT salesUuid FROM sales";
                 }elseif(self::$filter === 'today'){
                     $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE()";
+                }elseif(self::$filterDate !== false && strtotime(self::$filterDate)){
+                    $total = "SELECT salesUuid FROM sales WHERE salesDate ='".self::$filterDate."'";
                 }else{
                     $getMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
                     $total = "SELECT salesUuid FROM sales WHERE DATE_FORMAT(salesDate, '%Y-%m') ='".$getMonth."'";
@@ -74,6 +77,8 @@
                     $total = "SELECT salesUuid FROM sales WHERE recordedBy =:recordedBy";
                 }elseif(self::$filter === 'today'){
                     $total = "SELECT salesUuid FROM sales WHERE salesDate = CURDATE() AND recordedBy =:recordedBy";
+                }elseif(self::$filterDate !== false && strtotime(self::$filterDate)){
+                    $total = "SELECT salesUuid FROM sales WHERE recordedBy =:recordedBy AND salesDate ='".self::$filterDate."'";
                 }else{
                     $getMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
                     $total = "SELECT salesUuid FROM sales WHERE recordedBy =:recordedBy AND DATE_FORMAT(salesDate, '%Y-%m') ='".$getMonth."'";
@@ -87,7 +92,7 @@
 
             $totalSales = $totalStmt->rowCount();
 
-            $perPage = 5;
+            $perPage = 15;
             $totalPages = ceil($totalSales/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -96,6 +101,8 @@
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
                 }elseif(self::$filter === 'today'){
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() ORDER BY sales.id DESC LIMIT :s, :t";
+                }elseif(self::$filterDate !== false && strtotime(self::$filterDate)){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate ='".self::$filterDate."' ORDER BY sales.id DESC LIMIT :s, :t";
                 }else{
                     $getQMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE DATE_FORMAT(sales.salesDate, '%Y-%m') ='".$getQMonth."' ORDER BY sales.id DESC LIMIT :s, :t";
@@ -110,6 +117,8 @@
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
                 }elseif(self::$filter === 'today'){
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() AND sales.recordedBy =:recordedBy ORDER BY sales.id DESC LIMIT :s, :t";
+                }elseif(self::$filterDate !== false && strtotime(self::$filterDate)){
+                    $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.salesDate = CURDATE() AND sales.recordedBy =:recordedBy AND sales.salesDate ='".self::$filterDate."' ORDER BY sales.id DESC LIMIT :s, :t";
                 }else{
                     $getQMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
                     $sales = "SELECT sales.amount, sales.driver, sales.salesDate, drivers.driverFullName, users.fullName, sales.salesUuid FROM sales LEFT JOIN drivers ON drivers.driverUuid = sales.driver LEFT JOIN users ON users.userUuid = sales.recordedBy WHERE sales.recordedBy =:recordedBy AND DATE_FORMAT(sales.salesDate, '%Y-%m') ='".$getQMonth."' ORDER BY sales.id DESC LIMIT :s, :t";
@@ -151,7 +160,7 @@
             ]);
             $totalSales = $totalStmt->rowCount();
 
-            $perPage = 5;
+            $perPage = 15;
             $totalPages = ceil($totalSales/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -197,7 +206,7 @@
             ]);
             $totalSales = $totalStmt->rowCount();
 
-            $perPage = 5;
+            $perPage = 15;
             $totalPages = ceil($totalSales/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -235,7 +244,7 @@
             $totalStmt->execute();
             $totalSales = $totalStmt->rowCount();
 
-            $perPage = 1;
+            $perPage = 15;
             $totalPages = ceil($totalSales/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -337,5 +346,16 @@
 
             $getmonths = $mStmt->fetchAll(PDO::FETCH_ASSOC);
             return array_column($getmonths, 'saleMonth');
+        }
+
+        public static function getDates() 
+        {
+            (new self)->__construct();
+            $dates = "SELECT salesDate AS dates FROM sales";
+            $dStmt = self::$pdo->prepare($dates);
+            $dStmt->execute();
+
+            $getdates = $dStmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_column($getdates, 'dates');
         }
     }

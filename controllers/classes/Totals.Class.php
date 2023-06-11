@@ -1,6 +1,7 @@
 <?php 
     class Totals extends DataBase{
         public static $filter;
+        public static $filterDate;
         public static function bankBalance() : array{
             $totalDeposit = 0;
             $totalWithdraw = 0;
@@ -52,9 +53,10 @@
             ];
         }
 
-        public static function totalSalesFilter():array{
+        public static function totalSalesFilter():array
+        {
             $getQMonth = is_numeric(explode('-', self::$filter)[0]) && is_numeric(explode('-', self::$filter)[1]) ? self::$filter : date('Y').'-'.date('m');
-            $getExpense = "SELECT amount FROM sales WHERE DATE_FORMAT(sales.salesDate, '%Y-%m') ='".$getQMonth."'";
+            $getExpense = "SELECT amount FROM sales WHERE DATE_FORMAT(salesDate, '%Y-%m') ='".$getQMonth."'";
             $stmt = parent::$pdo->prepare($getExpense);
             $stmt->execute();
 
@@ -67,6 +69,25 @@
 
             return [
                 "totalSalesFilter" => number_format($totalFiltered, isset(explode('.', $totalFiltered)[1]) && strlen(explode('.', $totalFiltered)[1]) > 2 ? strlen(explode('.', $totalFiltered)[1]) : 2,'.', ',')
+            ];
+        }
+
+        public static function totalDailtySalesFilter():array
+        {
+            $getQMonth = strtotime(self::$filterDate) ? self::$filterDate : date('Y-m-d');
+            $getExpense = "SELECT amount FROM sales WHERE salesDate ='".$getQMonth."'";
+            $stmt = parent::$pdo->prepare($getExpense);
+            $stmt->execute();
+
+            $totalFiltered = 0;
+
+            $filteredSales = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach($filteredSales as $filteredSale){
+                $totalFiltered += $filteredSale['amount'];
+            }
+
+            return [
+                "totalDailySalesFilter" => number_format($totalFiltered, isset(explode('.', $totalFiltered)[1]) && strlen(explode('.', $totalFiltered)[1]) > 2 ? strlen(explode('.', $totalFiltered)[1]) : 2,'.', ',')
             ];
         }
 

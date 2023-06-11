@@ -174,7 +174,6 @@ if(document.forms.addDriver){
         tBody.innerHTML = '';
         const fetchDrivers = await fetch('/api/drivers?search='+search+'&&page='+page);
         const drivers = await fetchDrivers.json();
-        console.log(drivers);
         if(drivers.message && drivers.message == "Redirect"){
             document.location.href = "/logout"
         }else if(drivers.status){
@@ -273,9 +272,7 @@ if(document.forms.addDriver){
                     const formData = new FormData();
                     formData.append('driverId', driverId);
                     formData.append('method', 'GET');
-                    console.log(driverId);
                     const response = await APIGet('/api/drivers', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -366,7 +363,6 @@ if(document.forms.addDriver){
                     formData.append('driverId', driverId);
                     formData.append('method', 'GET');
                     const response = await APIGet('/api/drivers', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -533,7 +529,6 @@ if(document.forms.addDriver){
                 body: formData
             });
             const response = await fetching.json();
-            console.log(response);
             document.querySelector('#pError').innerHTML = '';
             
            if(response.message == "Redirect"){
@@ -754,7 +749,6 @@ if(document.forms.addDriver){
                 body: formData
             });
             const response = await fetching.json();
-            console.log(response);
             document.querySelector('#pError').innerHTML = '';
             
            if(response.message == "Redirect"){

@@ -316,7 +316,6 @@ if(document.forms.addWorkerFrom){
             body: data
         });
         const response = await request.json();
-        console.log(response);
         if(response.message && response.message == "Redirect"){
             document.location.href = "/logout"
             return;
@@ -348,7 +347,6 @@ if(document.forms.addWorkerFrom){
                     e.stopImmediatePropagation();
                     const workerId = workerDeleteBtn.getAttribute('data-tid');
                     const formData = new FormData();
-                    console.log(workerId);
                     formData.append('workerId', workerId);
                     formData.append('method', 'DELETE');
                     APIDeleteData(formData);
@@ -372,7 +370,6 @@ if(document.forms.addWorkerFrom){
                     formData.append('workerId', workerId);
                     formData.append('method', 'GET');
                     const response = await APIGet('/api/workers', formData);
-                    console.log(response);
                     if(response.message && response.message == "Redirect"){
                         document.location.href = "/logout"
                         return;
@@ -455,7 +452,6 @@ if(document.forms.addWorkerFrom){
                     const formData = new FormData();
                     formData.append('workerId', workerId);
                     formData.append('method', 'DELETE');
-                    console.log(workerId);
                     APIDeleteData(formData);
                     /* d7c6c385-9919-401e-a63f-4d8246fd9f5d */
                 });
@@ -501,7 +497,6 @@ if(document.forms.addWorkerFrom){
                     e.stopImmediatePropagation();
                     detailsBody.innerHTML = loadingDiv;
                     const workerId = workerShowBtn.getAttribute('data-tid');
-                    console.log(workerId);
                     const formData = new FormData();
                     formData.append('workerId', workerId);
                     formData.append('method', 'GET');
@@ -826,7 +821,6 @@ if(document.forms.addWorkerFrom){
                 body: formData
             });
             const response = await fetching.json();
-            console.log(response);
             document.querySelector('#pError').innerHTML = '';
             
             if(response.message == "Redirect"){

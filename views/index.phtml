@@ -68,8 +68,11 @@
               <div class="avatar flex-shrink-0">
                 <img src="/views/assets/img/icons/unicons/acquisition.png" alt="Credit Card" class="rounded">
               </div>
+              <div>
+                <input type="text" id="filterDateSelector" placeholder="Filter sales by date" value="<?php echo date('Y-m-d'); ?>" class="form-control">
+              </div>
             </div>
-            <span>Today's Sales</span>
+            <span class="fw-semibold d-block mb-1">Total Daily Sales</span>
             <h3 class="card-title text-nowrap mb-1" id="totalST"><i class='bx bx-loader-alt bx-spin'></i></h3>
           </div>
         </div>
@@ -230,7 +233,19 @@
   
   <script src="/views/assets/vendor/js/menu.js"></script>
   <?php if($_SESSION['userRole'] !== 'attendant'): ?>
-  <script src="/views/api/dashboard.API.js"></script>
+  <script src="/views/api/dashboard.API.js?v=1"></script>
+  <script src="/views/assets/js/datepicker.js"></script>
+  <script>
+  const allDates = <?php $date = date('Y-m-d'); echo $getSalesDates ?>;
+  allDates.push(<?php echo "'{$date}'" ?>);
+    flatpickr("#filterDateSelector", {
+      altInput: true,
+      altFormat: 'F j, Y',
+      dateFormat: 'Y-m-d',
+      maxDate: 'today',
+      enable: [...new Set(allDates)]
+    });
+  </script>
   <?php endif ?>
   <!-- endbuild -->
 
@@ -246,5 +261,4 @@
 </body>
 
 
-<!-- Mirrored from demos.themeselection.com/sneat-bootstrap-html-admin-template-free/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 26 Dec 2022 09:08:55 GMT -->
 </html>

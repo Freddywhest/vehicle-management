@@ -119,7 +119,7 @@
             $totalStmt->execute();
             $totalSalary = $totalStmt->rowCount();
 
-            $perPage = 10;
+            $perPage = 15;
             $totalPages = ceil($totalSalary/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
@@ -169,7 +169,7 @@
             ]);
             $totalSalary = $totalStmt->rowCount();
 
-            $perPage = 10;
+            $perPage = 15;
             $totalPages = ceil($totalSalary/$perPage);
             $offset = (self::$currentPage - 1) * $perPage;
 
