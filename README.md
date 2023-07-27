@@ -23,7 +23,7 @@ Vehicle management system is is a web based application. This application allows
     1. Add sales
     2. Add driver
     
-****VISIT https://alfrednti.com/portfolios FOR MORE PROJECTS****
+****VISIT my github repo FOR MORE PROJECTS****
 
 ---------------------------------------------------------------------
 
@@ -47,9 +47,9 @@ Vehicle management system is is a web based application. This application allows
 
 ***** IF YOU FIND ANY ERRORS OR ANY PROBLEMS RELATED THIS PROJECT, FEEL FREE TO CONTACT ME ON: *****  
 
-Email -> contact@alfrednti.com / alfrednti5000@gmail.com
+Email -> alfrednti5000@gmail.com
 
-Website-> https://alfrednti.com
+Website-> https://freddywhest.github.io/portfolio
 
 I WILL REPLY YOU AS SOON AS WE CAN
 
